@@ -170,6 +170,12 @@ Workspace-scoped custom agents are included under `.github/agents/`:
 
 In VS Code Copilot Chat, use the agent picker to switch between them based on the task.
 
+Example invocation style:
+- "Jeeves, what's next?"
+- "Jeeves, run my weekly check-in."
+- "Shelby, help me study for this interview."
+- "Shelby, give me a 60-minute prep block for system design."
+
 ## Folder Structure
 
 ```
