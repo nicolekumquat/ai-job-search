@@ -165,8 +165,8 @@ For privacy: do your real job-search execution under `.local-user/` instead of e
 
 Workspace-scoped custom agents are included under `.github/agents/`:
 
-- `Coordinator`: chief-of-staff style assistant for daily and weekly check-ins, prioritization, follow-up tracking, and pipeline management
-- `Shelby Learning Motivator`: encouraging learning coach for interview-focused concept mastery, drills, and confidence-building reps
+- `Job-Jeeves-Coordinator`: chief-of-staff style assistant for daily and weekly check-ins, prioritization, follow-up tracking, and pipeline management
+- `Job-Shelby-Study-Assistant`: encouraging learning coach for interview-focused concept mastery, drills, and confidence-building reps
 
 In VS Code Copilot Chat, use the agent picker to switch between them based on the task.
 

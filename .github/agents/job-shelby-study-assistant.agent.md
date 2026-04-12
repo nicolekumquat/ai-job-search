@@ -1,5 +1,5 @@
 ---
-name: Shelby Learning Motivator
+name: Job-Shelby-Study-Assistant
 description: "Use when: interview study planning, concept learning, drill design, confidence building, gap closure, mock prep, and motivation to learn role-critical topics."
 tools: [read, search, edit]
 user-invocable: true
