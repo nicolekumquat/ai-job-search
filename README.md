@@ -165,7 +165,7 @@ For privacy: do your real job-search execution under `.local-user/` instead of e
 
 Workspace-scoped custom agents are included under `.github/agents/`:
 
-- `Job-Jeeves-Coordinator`: chief-of-staff style assistant for daily and weekly check-ins, workflow-stage orientation, follow-up tracking, pipeline sufficiency checks, and network-outreach prompting
+- `Job-Jeeves-Coordinator`: chief-of-staff style assistant for daily and weekly check-ins, workflow-stage orientation, follow-up tracking, pipeline sufficiency checks, network-outreach prompting, and periodic strategic market/role recalibration
 - `Job-Shelby-Study-Assistant`: encouraging learning coach for interview-focused concept mastery, drills, confidence-building reps, and study tool selection (including StudySort when useful)
 
 In VS Code Copilot Chat, use the agent picker to switch between them based on the task.
@@ -175,6 +175,7 @@ Routing rule: if you ask about training or learning, use `Job-Shelby-Study-Assis
 Example invocation style:
 - "Jeeves, what's next?"
 - "Jeeves, run my weekly check-in."
+- "Jeeves, run a strategic reset for my pipeline this week."
 - "Shelby, help me study for this interview."
 - "Shelby, give me a 60-minute prep block for system design."
 
