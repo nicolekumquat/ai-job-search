@@ -161,6 +161,15 @@ Then open the workspace in VS Code (or your editor of choice with AI assistance)
 
 For privacy: do your real job-search execution under `.local-user/` instead of editing framework files directly.
 
+## Included Custom Agents
+
+Workspace-scoped custom agents are included under `.github/agents/`:
+
+- `Coordinator`: chief-of-staff style assistant for daily and weekly check-ins, prioritization, follow-up tracking, and pipeline management
+- `Shelby Learning Motivator`: encouraging learning coach for interview-focused concept mastery, drills, and confidence-building reps
+
+In VS Code Copilot Chat, use the agent picker to switch between them based on the task.
+
 ## Folder Structure
 
 ```

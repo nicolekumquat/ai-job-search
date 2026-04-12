@@ -237,6 +237,17 @@ Remove the scheduled reminder task (optional):
 powershell -ExecutionPolicy Bypass -File .\remove-reminder-task.ps1
 ```
 
+## Step 11: Use the Built-In Agents (Optional)
+
+This repo now includes two custom Copilot agents in `.github/agents/`:
+- `Coordinator` - your chief-of-staff style job-search assistant for check-ins, prioritization, follow-ups, and pipeline balance
+- `Shelby Learning Motivator` - your encouraging learning coach for study plans, drills, and interview-readiness reps
+
+How to use them in VS Code Copilot Chat:
+1. Open the agent selector in chat.
+2. Choose `Coordinator` for planning and execution rhythm.
+3. Choose `Shelby Learning Motivator` for focused learning sessions.
+
 ## Ongoing
 
 - Keep `.local-user/Job-Tracker.md` current with status and last actions
