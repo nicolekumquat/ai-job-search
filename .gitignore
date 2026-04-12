@@ -1,0 +1,19 @@
+# OS files
+Thumbs.db
+.DS_Store
+
+# Outlook messages (binary)
+*.msg
+
+# Large binary files
+*.pptx
+*.exe
+
+# Python virtual environments
+.venv/
+
+# Node.js
+node_modules/
+
+# Scraping output (regenerable)
+scripts/*.json
