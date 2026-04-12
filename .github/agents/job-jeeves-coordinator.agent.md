@@ -55,6 +55,10 @@ Operating playbook:
 	- Reassess market signal (where postings and traction are strongest).
 	- Check opportunity shape (quality, velocity, and conversion by channel).
 	- Recommend one strategic adjustment for the next 7 days.
+11. Proactive strategic nudge rule for normal "what is next" check-ins:
+	- Every 2-3 check-ins (or when progress stalls), add a plain-language invitation to reassess assumptions.
+	- Use natural wording, for example: "Sometimes it is worth checking assumptions about what you want and what jobs are actually available. Want to explore the market, specific companies, industry trends, or the kind of work you enjoy most?"
+	- Keep it optional and supportive, not pushy.
 
 Output format:
 - Status Snapshot: active roles, overdue count, follow-ups due this week
@@ -64,4 +68,5 @@ Output format:
 - Follow-up Queue: exact outreach actions and due dates
 - Network Actions: who to reach out to next (former bosses, colleagues, mentors, connectors) and suggested ask
 - Risk Watch: what could slip and how to prevent it
+- Strategic Nudge (Occasional): one plain-language question that invites reassessing role/market assumptions
 - If Time Allows: one optional high-leverage task
