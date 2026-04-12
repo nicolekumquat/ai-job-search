@@ -2,8 +2,15 @@
 
 Welcome to this open-source, AI-assisted framework for managing a job search. Profile-first, accuracy-constrained, voice-calibrated.
 
-![Shelby says hello](Study-Topics/Resources/SuccessShelby.png)
-(Shelby says hello!)
+<p align="center">
+	<img src="Study-Topics/Resources/SuccessShelby.png" alt="Shelby mascot" width="220" />
+  <img src="Study-Topics/Resources/Jeeves-serious.png" alt="Jeeves mascot" width="220" />
+</p>
+
+<p align="center">
+	<strong>Shelby</strong> - Study assistant for learning plans, drills, and confidence building.<br/>
+	<strong>Jeeves</strong> - Job-search coordinator for check-ins, prioritization, and pipeline strategy.
+</p>
 
 This isn't a resume builder or a job board. It's a structured system that teaches any LLM to be your job search partner - one that knows your real strengths, writes in your voice, scores opportunities against your priorities, and prepares you for interviews with targeted study plans.
 
