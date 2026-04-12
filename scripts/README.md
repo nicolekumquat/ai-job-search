@@ -35,3 +35,31 @@ Creates `J-XX-CompanyName/01-Job-Description.md` for each scraped job. Then tria
 - LinkedIn requires manual login (no credential automation)
 - LinkedIn's DOM changes periodically - selectors may need updating
 - Scraping results are gitignored (regenerable data)
+
+## Daily Reminder Email (Optional)
+
+`job-reminder.ps1` sends a simple overnight reminder email from:
+- `.local-user/tasks.md` (open checkbox tasks)
+- `.local-user/Job-Tracker.md` (stale pipeline detection)
+
+### Dry run (preview only)
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/job-reminder.ps1 -DryRun
+```
+
+### Send email
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/job-reminder.ps1 -To "you@example.com"
+```
+
+### What it includes
+- `OVERDUE`, `TODAY`, `TOMORROW`, `UPCOMING`, `ACTION`, and `STALE` status rows
+- Study items section (if tasks under `## Study` exist)
+- Timestamped footer showing source files
+
+### Suggested scheduler setup (Windows)
+- Run daily early morning (for example 6:30 AM)
+- Command:
+	- `powershell`
+- Arguments:
+	- `-ExecutionPolicy Bypass -File "<repo>\scripts\job-reminder.ps1" -To "you@example.com"`
