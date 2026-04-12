@@ -49,17 +49,21 @@ Managing 3 concurrent job searches. Active: TechCorp (interviews), CloudScale (e
 
 ---
 
-## J-02: CloudScale
+## J-02: BrandiKane
 
 ### This Week
 
-- [ ] P2 - Review CloudScale JD + company research @due:2026-04-14 @estimate:1 hour
-  - Check recent news, funding announcements
-  - Identify fit vs. gaps
+- [x] P2 - Apply to BrandiKane Senior PM role @due:2026-04-12 @estimate:20 min
+  - Application submitted through company careers page + LinkedIn
 
-- [ ] P2 - Schedule intro call with recruiter @due:2026-04-15 @estimate:30 min
-  - Ask: scope, timeline, team structure
-  - Decide: pursue or pass
+- [x] P2 - Send referral request email to former colleague @due:2026-04-12 @estimate:20 min
+  - Asked for recommendation/introduction to hiring team
+
+- [ ] P1 - Follow up on referral email if no response @due:2026-04-26 @estimate:15 min
+  - Two-week follow-up checkpoint
+
+- [ ] P2 - If referral responds, schedule 20-minute networking call and capture notes @due:2026-04-27 @estimate:30 min
+  - Log call outcomes in J-02 folder and task tracker
 
 ---
 

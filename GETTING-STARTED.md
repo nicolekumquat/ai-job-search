@@ -87,6 +87,14 @@ Also preserve the two-mode boundary:
 
 ## Step 6: Start Searching
 
+Use a dual-channel sourcing approach:
+- **Web sourcing:** job boards, LinkedIn, and company career pages
+- **Network sourcing:** former colleagues, managers, mentors, and trusted contacts who can provide leads or referrals
+
+Track both channels in `.local-user/`:
+- Log job applications and status in `.local-user/Job-Tracker.md`
+- Log outreach emails, follow-up dates, and networking meetings in `.local-user/tasks.md` and the relevant `J-*` folder
+
 ### Option A: LinkedIn Scraping Pipeline
 ```bash
 cd scripts
@@ -208,6 +216,9 @@ This format is optional but recommended. It works with common task dashboards if
 
 - Keep `.local-user/Job-Tracker.md` current with status and last actions
 - Update `.local-user/tasks.md` as you progress through interviews, offers, and decisions
+- Track networking actions as first-class pipeline work (outreach sent, follow-up due dates, and meeting outcomes), not just application submissions
+- During check-ins: if you only have one active job, ask whether to add 1-3 additional opportunities in parallel to reduce single-pipeline risk
+- During weekly check-ins: even with 2-3 active jobs, consider sourcing 1-2 additional opportunities as backup in case one pipeline slows or closes
 - Archive closed opportunities by moving folders from `.local-user/_Active/` to `.local-user/_Archive/`
 - When you get an offer, use the fit analysis and rubric scores to compare and decide
 - Review your Gap-Log before every interview to stay prepared on weak areas
