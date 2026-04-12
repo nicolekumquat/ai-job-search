@@ -231,6 +231,12 @@ Customize time (optional):
 powershell -ExecutionPolicy Bypass -File .\setup-reminder-task.ps1 -To "you@example.com" -Time "07:15"
 ```
 
+Remove the scheduled reminder task (optional):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\remove-reminder-task.ps1
+```
+
 ## Ongoing
 
 - Keep `.local-user/Job-Tracker.md` current with status and last actions

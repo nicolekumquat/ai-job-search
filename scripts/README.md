@@ -68,3 +68,8 @@ Quick setup helper from repo root:
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\setup-reminder-task.ps1 -To "you@example.com"
 ```
+
+Cleanup helper (remove scheduled task):
+```powershell
+powershell -ExecutionPolicy Bypass -File .\remove-reminder-task.ps1
+```
