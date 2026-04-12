@@ -1,8 +1,22 @@
 # AI Job Search Toolkit
 
-An open-source, AI-assisted framework for managing a job search. Profile-first, accuracy-constrained, voice-calibrated.
+Welcome to this open-source, AI-assisted framework for managing a job search. Profile-first, accuracy-constrained, voice-calibrated.
+
+![Shelby says hello](Study-Topics/Resources/SuccessShelby.png)
+(Shelby says hello!)
 
 This isn't a resume builder or a job board. It's a structured system that teaches any LLM to be your job search partner - one that knows your real strengths, writes in your voice, scores opportunities against your priorities, and prepares you for interviews with targeted study plans.
+
+## Framework vs Personal Workspace
+
+Use this repository as the shared framework. Keep personal job-search execution in a local, gitignored workspace.
+
+- Framework (tracked): docs, templates, scripts, and instructions that help all users.
+- Personal (private): profile content, real applications, trackers, interview notes, outreach drafts, and study outputs.
+
+Create a local private root at `.local-user/` and do personal work there. This path is ignored by git, so personal search data is not checked in.
+
+If you or your friends have ideas to improve the toolkit, open a GitHub Issue first. Optional PRs are welcome for framework changes.
 
 ## How It Works
 
@@ -16,6 +30,7 @@ Before the AI searches for anything, it learns who you are. You fill in structur
 |---|---|
 | `About_You/Resume.md` | Career history, accomplishments, technical depth |
 | `About_You/Strengths.md` | Your demonstrated strengths with evidence |
+| `About_You/Story-Bank.md` | 5-8 reusable STAR stories in neutral, reusable form |
 | `About_You/Ideal-Role-Profile.md` | What roles fit you, where you'd be valued, what to avoid |
 | `About_You/Search-Context.md` | Private context: situation, constraints, gaps, positioning |
 | `About_You/Logistics.md` | Location, level, comp, dealbreakers |
@@ -37,11 +52,35 @@ Every email, cover letter, and LinkedIn post the AI drafts afterward gets checke
 |---|---|
 | `scripts/linkedin-search.js` | Searches LinkedIn Jobs with your criteria via Playwright |
 | `scripts/linkedin-scrape-jds.js` | Scrapes full job descriptions from LinkedIn URLs |
-| `scripts/create-job-folders.js` | Creates `J-XX-CompanyName/` folders with `Job-Description.md` |
+| `scripts/create-job-folders.js` | Creates `J-XX-CompanyName/` folders with `01-Job-Description.md` in `.local-user/_Active/` |
 | `Job-Rubric.md` | Weighted scoring rubric you configure for your priorities |
-| `Job-Tracker.md` | Status and history for every opportunity |
+| `.local-user/Job-Tracker.md` | Status and history for every opportunity (personal workspace) |
+| `.local-user/tasks.md` | Task list for next steps and follow-ups (personal workspace) |
 
-Jobs get triaged into `_Active/`, `_Potential/`, or `_Archive/`.
+Jobs get organized into `.local-user/_Active/`, `.local-user/_Potential/`, or `.local-user/_Archive/`.
+
+### Job Folder Artifact Ordering
+
+Use numbered filenames inside each `J-*` folder so artifacts stay chronologically and logically ordered.
+
+Recommended base sequence:
+
+- `01-Job-Description.md`
+- `10-Company-Research.md`
+- `20-Fit-Analysis.md`
+- `25-Self-Assessment.md`
+- `30-Rubric-Score.md`
+- `35-Study-Plan.md`
+- `40-Outreach-Email.md`
+- `50-Customer-Value-Stories.md`
+- `60-Interview-Prep.md`
+- `65-Mock-Interview-Packet.md`
+- `70-Interview-Notes.md`
+- `75-Follow-Up-Notes.md`
+- `80-Post-Interview-Thank-You.md`
+
+Reserve gaps for intermediate artifacts so you can insert docs without renaming everything later.
+Examples for late-stage flow: `90-Offer-Packet-Review.md`, `95-Negotiation-Plan.md`, `98-Decision.md`.
 
 ### Phase 4: Analyze Fit and Prepare
 
@@ -51,8 +90,10 @@ For each serious opportunity, the AI generates materials grounded in your profil
 |---|---|
 | `templates/Fit-Analysis.md` | Where you align (with evidence), where you don't, how to position |
 | `templates/Self-Assessment.md` | Mnookin-style Interests / Capabilities / Market Realities |
+| `templates/Customer-Value-Stories.md` | Tailored STAR stories selected from your story bank for a specific role |
 | `templates/Study-Plan.md` | Targeted study plan based on gaps from the fit analysis |
-| `templates/Interview-Prep.md` | Interviewer research + role-specific questions + study guide |
+| `templates/Interview-Prep.md` | Company research + interviewer research + role-specific questions + study guide |
+| `templates/Interview-Notes.md` | Consolidated interview notes plus lightly cleaned raw note handling that preserves every fragment |
 | `templates/Outreach-Email.md` | Email drafts in your voice, grounded in your real experience |
 
 ### Phase 5: Study and Drill
@@ -82,6 +123,8 @@ See [Study-Topics/README.md](Study-Topics/README.md) for the full system referen
 |---|---|
 | `Job-Tracker.md` | Single view of all opportunities with status and last action |
 | `tasks.md` | Tasks and next steps (compatible with MIRA or any checkbox-based system) |
+
+Raw per-interviewer notes should also live in the job folder as they happen, for example `Interview note - Bob.md`. Keep those originals, then merge the signal into the structured `70-Interview-Notes.md` artifact.
 
 ## Core Principles
 
@@ -116,16 +159,21 @@ npx playwright install chromium
 
 Then open the workspace in VS Code (or your editor of choice with AI assistance) and start a conversation with your AI assistant. The instructions file teaches it how to help you.
 
+For privacy: do your real job-search execution under `.local-user/` instead of editing framework files directly.
+
 ## Folder Structure
 
 ```
 ai-job-search/
 ├── .github/
 │   └── copilot-instructions.md    # LLM instructions (configurable)
+├── .local-user/                   # PRIVATE local-only workspace (gitignored)
+├── local-user-template/           # Suggested private workspace layout
 ├── About_You/                     # Your profile (source of truth)
 │   ├── _INDEX.md                  # Routing table for AI agents
 │   ├── Resume.md                  # Career history + accomplishments
 │   ├── Strengths.md               # Demonstrated strengths with evidence
+│   ├── Story-Bank.md              # Reusable STAR stories
 │   ├── Ideal-Role-Profile.md      # Where you'd be valued
 │   ├── Search-Context.md          # PRIVATE: situation, gaps, positioning
 │   ├── Logistics.md               # Location, level, comp, constraints
@@ -165,6 +213,11 @@ PRs welcome. The most valuable contributions are:
 - Templates for additional job search artifacts (negotiation prep, reference prep, etc.)
 - Adaptations of the LLM instructions for other AI assistants (Claude Projects, ChatGPT custom instructions, etc.)
 - Improvements to the profile builder flow
+
+For user feedback from real usage:
+- Open a GitHub Issue with the improvement idea or pain point.
+- Optional: include a PR for framework-only changes.
+- Do not include personal job-search content in Issues or PRs.
 
 ## License
 

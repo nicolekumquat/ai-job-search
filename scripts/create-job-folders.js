@@ -8,6 +8,7 @@ const path = require('path');
 // ============================================================
 const INPUT_FILE = 'linkedin-jd-results.json';
 const OUTPUT_DIR = path.join(__dirname, '..');
+const JD_FILENAME = '01-Job-Description.md';
 
 if (!fs.existsSync(INPUT_FILE)) {
   console.log(`${INPUT_FILE} not found. Run linkedin-scrape-jds.js first.`);
@@ -38,8 +39,8 @@ for (const job of jds) {
   md += job.description || '*(No description scraped)*';
   md += '\n';
 
-  fs.writeFileSync(path.join(folderPath, 'Job-Description.md'), md);
-  console.log(`Created: ${folderName}/Job-Description.md`);
+  fs.writeFileSync(path.join(folderPath, JD_FILENAME), md);
+  console.log(`Created: ${folderName}/${JD_FILENAME}`);
 }
 
 console.log(`\nDone! Created ${jds.length} folders.`);

@@ -28,7 +28,7 @@ Visits each job URL and extracts the full description. Saves to `linkedin-jd-res
 ```bash
 node create-job-folders.js
 ```
-Creates `J-XX-CompanyName/Job-Description.md` for each scraped job. Then triage into `_Active/`, `_Potential/`, or `_Archive/`.
+Creates `J-XX-CompanyName/01-Job-Description.md` for each scraped job. Then triage into `_Active/`, `_Potential/`, or `_Archive/`.
 
 ## Notes
 - Scripts use Playwright with Edge and persistent context for authentication

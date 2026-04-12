@@ -17,3 +17,6 @@ node_modules/
 
 # Scraping output (regenerable)
 scripts/*.json
+
+# Local private workspace (never commit personal job-search data)
+.local-user/
