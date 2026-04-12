@@ -55,7 +55,28 @@ For each serious opportunity, the AI generates materials grounded in your profil
 | `templates/Interview-Prep.md` | Interviewer research + role-specific questions + study guide |
 | `templates/Outreach-Email.md` | Email drafts in your voice, grounded in your real experience |
 
-### Phase 5: Stay Organized
+### Phase 5: Study and Drill
+
+The `Study-Topics/` folder is a complete AI-assisted study system. Write notes on any topic, then generate quizzes and drills from them - all graded with structured feedback.
+
+**Knowledge mode** tests subject matter through MCQ quizzes (graded by a Python script - no AI needed).
+
+**Behavior mode** trains communication patterns through 4 progressive phases:
+
+| Phase | Exercise Type | What It Tests |
+|---|---|---|
+| 1. Concept Drilling | MCQ Quiz | "Do I know the framework?" |
+| 2. Pattern Recognition | Altitude Drill | "Can I spot and fix weak answers?" |
+| 3. Applied Practice | Scenario Response | "Can I write good answers from scratch?" |
+| 4. Pressure Testing | Rapid-Fire Drill | "Can I do it under time pressure?" |
+
+Gate check between phases: 80%+ quiz score or 13+/20 drill score before advancing.
+
+See [Study-Topics/README.md](Study-Topics/README.md) for the full system reference.
+
+**Companion tool:** [StudySort](https://github.com/nicolekumquat/StudySort) is a drag-and-drop learning game for visual/interactive concept reinforcement.
+
+### Phase 6: Stay Organized
 
 | File | What it does |
 |---|---|
@@ -111,6 +132,16 @@ ai-job-search/
 │   └── Writing-Style/
 │       ├── Voice-Quick-Reference.md
 │       └── Authenticity-Rubric.md
+├── Study-Topics/                  # AI-assisted study system
+│   ├── README.md                  # Full system reference
+│   ├── Data/                      # Your study notes (source material)
+│   ├── Quizzes/                   # Generated quizzes
+│   ├── Exercises/                 # Generated drills
+│   ├── Completed/                 # Your answered quizzes and drills
+│   ├── Results/                   # Graded reports
+│   ├── Gap-Log.md                 # Running log of knowledge gaps
+│   ├── grade_quiz.py              # Python grading script for MCQ quizzes
+│   └── prompts/                   # Generation and grading prompt templates
 ├── _Active/                       # Active job opportunities
 ├── _Potential/                    # Potential, not yet pursued
 ├── _Archive/                      # Closed or declined

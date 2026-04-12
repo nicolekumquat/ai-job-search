@@ -104,6 +104,37 @@ For each active opportunity, ask your AI assistant to:
 
 Update `Job-Tracker.md` and `tasks.md` as you go.
 
+## Step 8: Study and Drill
+
+When a fit analysis reveals knowledge gaps, use `Study-Topics/` to close them:
+
+### Write Study Notes
+Create a file in `Study-Topics/Data/` (e.g., `System-Design.md`) with your notes on the topic. Use `Study-Topics/Data/_TEMPLATE.md` as a starting point.
+
+### Generate and Take Quizzes
+Ask your AI: *"Generate a quiz from Study-Topics/Data/System-Design.md focusing on storage tradeoffs"*
+
+Fill in your answers in the `Completed/Quizzes/` copy, then grade:
+```bash
+cd Study-Topics
+python grade_quiz.py Completed/Quizzes/System-Design_Quiz_v01.md
+```
+
+### Train Communication Patterns (Behavior Mode)
+For roles requiring executive communication, run the 4-phase behavior drill progression:
+
+1. **Concept Quiz** - Score 80%+ before advancing
+2. **Altitude Drill** - Rewrite weak answers at a senior level
+3. **Scenario Response** - Write full answers from scratch
+4. **Rapid-Fire** - Answer under 90-second time pressure
+
+Ask the AI to generate each exercise type using the prompt templates in `Study-Topics/prompts/`, then grade with `prompts/grade-exercise.md`.
+
+### Track Gaps
+Add missed concepts to `Study-Topics/Gap-Log.md`. Review it before every interview.
+
+See [Study-Topics/README.md](Study-Topics/README.md) for the complete system reference.
+
 ## Ongoing
 
 - Keep `Job-Tracker.md` current with status and last actions
