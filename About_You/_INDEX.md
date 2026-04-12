@@ -9,6 +9,7 @@
 | **Score text for authenticity** | `Writing-Style/Authenticity-Rubric.md` |
 | **Get resume facts & career history** | `Resume.md` |
 | **Get demonstrated strengths** | `Strengths.md` |
+| **Get reusable STAR stories** | `Story-Bank.md` |
 | **Understand ideal role targets** | `Ideal-Role-Profile.md` |
 | **Get private search context** | `Search-Context.md` |
 | **Get logistics and constraints** | `Logistics.md` |

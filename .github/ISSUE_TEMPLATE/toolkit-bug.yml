@@ -1,0 +1,51 @@
+name: Toolkit Bug
+description: Report a bug in scripts/templates/docs/instructions.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Report framework bugs here.
+        Do not include personal job-search content.
+
+  - type: input
+    id: area
+    attributes:
+      label: Affected area
+      placeholder: e.g., scripts/linkedin-scrape-jds.js, templates/Fit-Analysis.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: 1. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy checklist
+      options:
+        - label: I removed personal/private job-search details from this report.
+          required: true
+        - label: I understand personal work belongs in local .local-user/, not in the repository.
+          required: true

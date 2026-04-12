@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Personal Job Search Privacy Reminder
+    url: https://github.com/nicolekumquat/ai-job-search/blob/master/README.md
+    about: Personal job-search artifacts should stay local in .local-user/ and not be posted publicly.
