@@ -170,6 +170,7 @@ Workspace-scoped custom agents are included under `.github/agents/`:
 
 In VS Code Copilot Chat, use the agent picker to switch between them based on the task.
 Both agents begin with a short self-introduction and example prompt suggestions.
+Routing rule: if you ask about training or learning, use `Job-Shelby-Study-Assistant`.
 
 Example invocation style:
 - "Jeeves, what's next?"
