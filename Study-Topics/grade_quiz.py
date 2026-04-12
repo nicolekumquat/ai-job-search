@@ -7,6 +7,7 @@ Usage:
     python grade_quiz.py Completed/Quizzes/<quiz-file>.md
 """
 
+import base64
 import random
 import re
 import sys
@@ -246,6 +247,33 @@ def generate_certificate(parsed: dict, graded: dict, output_path: str) -> str:
     if not topic or topic.lower() in ("all", "general", "everything"):
         topic = title
 
+    # Load a random Shelby image as base64
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    shelby_choice = random.choice(["SuccessShelby.png", "LearningShelby.png"])
+    image_path = os.path.join(script_dir, "Resources", shelby_choice)
+    shelby_html = ""
+    if os.path.exists(image_path):
+        ext = os.path.splitext(image_path)[1].lower()
+        mime = "image/png" if ext == ".png" else "image/jpeg"
+        with open(image_path, "rb") as img_file:
+            img_b64 = base64.b64encode(img_file.read()).decode("utf-8")
+        shelby_html = f'<img src="data:{mime};base64,{img_b64}" alt="Shelby" class="shelby-img">'
+    else:
+        # Fallback to any image in Resources/
+        resources_dir = os.path.join(script_dir, "Resources")
+        if os.path.isdir(resources_dir):
+            for fname in os.listdir(resources_dir):
+                if fname.lower().endswith((".png", ".jpg", ".jpeg")):
+                    fallback = os.path.join(resources_dir, fname)
+                    ext = os.path.splitext(fallback)[1].lower()
+                    mime = "image/png" if ext == ".png" else "image/jpeg"
+                    with open(fallback, "rb") as img_file:
+                        img_b64 = base64.b64encode(img_file.read()).decode("utf-8")
+                    shelby_html = f'<img src="data:{mime};base64,{img_b64}" alt="Shelby" class="shelby-img">'
+                    break
+        if not shelby_html:
+            shelby_html = '<div class="trophy">🏆</div>'
+
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -306,6 +334,16 @@ def generate_certificate(parsed: dict, graded: dict, output_path: str) -> str:
             margin-bottom: 2rem;
         }}
 
+        .shelby-img {{
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #c9a84c;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }}
+
         .trophy {{
             font-size: 5rem;
             margin-bottom: 1.5rem;
@@ -350,7 +388,7 @@ def generate_certificate(parsed: dict, graded: dict, output_path: str) -> str:
     <div class="certificate">
         <div class="header">Certificate of Achievement</div>
         <div class="subheader">Study Topics</div>
-        <div class="trophy">🏆</div>
+        {shelby_html}
         <div class="quiz-name">Excellence demonstrated in</div>
         <div class="quiz-name"><strong>{topic}</strong></div>
         <div class="score">{score:.0f}%</div>
