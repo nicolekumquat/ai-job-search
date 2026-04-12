@@ -212,6 +212,25 @@ Create a `.local-user/tasks.md` file to track next steps across all your active 
 
 This format is optional but recommended. It works with common task dashboards if you want to add one later.
 
+## Step 10: Set Up Daily Reminder Email (Optional)
+
+If you want an overnight reminder email from your `.local-user/tasks.md` and `.local-user/Job-Tracker.md`, run this one-liner from the repo root:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup-reminder-task.ps1 -To "you@example.com"
+```
+
+What this does:
+- Creates a Windows Scheduled Task (`AIJobSearch-Reminder`)
+- Runs daily at 06:30 by default
+- Sends a simple status email using `scripts/job-reminder.ps1`
+
+Customize time (optional):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup-reminder-task.ps1 -To "you@example.com" -Time "07:15"
+```
+
 ## Ongoing
 
 - Keep `.local-user/Job-Tracker.md` current with status and last actions

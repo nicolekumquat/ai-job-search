@@ -63,3 +63,8 @@ powershell -ExecutionPolicy Bypass -File scripts/job-reminder.ps1 -To "you@examp
 	- `powershell`
 - Arguments:
 	- `-ExecutionPolicy Bypass -File "<repo>\scripts\job-reminder.ps1" -To "you@example.com"`
+
+Quick setup helper from repo root:
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup-reminder-task.ps1 -To "you@example.com"
+```
