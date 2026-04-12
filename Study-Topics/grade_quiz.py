@@ -7,6 +7,7 @@ Usage:
     python grade_quiz.py Completed/Quizzes/<quiz-file>.md
 """
 
+import random
 import re
 import sys
 import os
@@ -225,6 +226,147 @@ def generate_report(parsed: dict, graded: dict, output_path: str) -> None:
         f.write("\n".join(lines))
 
 
+ENCOURAGING_MESSAGES = [
+    "You're crushing it! Your dedication to learning is truly inspiring.",
+    "Outstanding work! Knowledge like this is what sets great professionals apart.",
+    "Brilliant performance! You've proven you really understand this material.",
+    "Wow - you nailed it! Keep this momentum going and there's no limit to what you can achieve.",
+    "Exceptional results! Your hard work and focus are clearly paying off.",
+    "You should be proud - this kind of mastery takes real effort and you've earned it!",
+]
+
+
+def generate_certificate(parsed: dict, graded: dict, output_path: str) -> str:
+    """Generate an HTML certificate for scores >= 90%."""
+    now = datetime.now(timezone.utc).strftime("%B %d, %Y")
+    message = random.choice(ENCOURAGING_MESSAGES)
+    score = graded["score_pct"]
+    title = parsed["title"] or "Study Quiz"
+    topic = parsed["topic"]
+    if not topic or topic.lower() in ("all", "general", "everything"):
+        topic = title
+
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate of Achievement</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap');
+
+        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+
+        body {{
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a1628 0%, #1a365d 100%);
+            font-family: 'Inter', sans-serif;
+            padding: 2rem;
+        }}
+
+        .certificate {{
+            background: #fffdf7;
+            border: 3px solid #c9a84c;
+            border-radius: 12px;
+            padding: 3rem;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+                        inset 0 0 0 6px #fffdf7,
+                        inset 0 0 0 8px #c9a84c;
+            position: relative;
+        }}
+
+        .certificate::before {{
+            content: '';
+            position: absolute;
+            top: 12px; left: 12px; right: 12px; bottom: 12px;
+            border: 1px solid #e8d5a3;
+            border-radius: 6px;
+            pointer-events: none;
+        }}
+
+        .header {{
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: #2c1810;
+            margin-bottom: 0.3rem;
+            letter-spacing: 2px;
+        }}
+
+        .subheader {{
+            font-size: 0.9rem;
+            color: #8b7355;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 2rem;
+        }}
+
+        .trophy {{
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+        }}
+
+        .quiz-name {{
+            font-size: 1.1rem;
+            color: #5a4a3a;
+            margin-bottom: 0.3rem;
+        }}
+
+        .score {{
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #c9a84c;
+            margin: 1rem 0;
+        }}
+
+        .message {{
+            font-size: 1rem;
+            color: #5a4a3a;
+            font-style: italic;
+            margin: 1.5rem 2rem;
+            line-height: 1.6;
+        }}
+
+        .date {{
+            font-size: 0.85rem;
+            color: #8b7355;
+            margin-top: 2rem;
+        }}
+
+        .footer {{
+            margin-top: 1rem;
+            font-size: 0.75rem;
+            color: #b8a88a;
+        }}
+    </style>
+</head>
+<body>
+    <div class="certificate">
+        <div class="header">Certificate of Achievement</div>
+        <div class="subheader">Study Topics</div>
+        <div class="trophy">🏆</div>
+        <div class="quiz-name">Excellence demonstrated in</div>
+        <div class="quiz-name"><strong>{topic}</strong></div>
+        <div class="score">{score:.0f}%</div>
+        <div class="message">"{message}"</div>
+        <div class="date">{now}</div>
+        <div class="footer">Awarded by your AI Study System</div>
+    </div>
+</body>
+</html>"""
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(html)
+
+    return output_path
+
+
 def main():
     if len(sys.argv) != 2:
         print("Usage: python grade_quiz.py <path-to-completed-quiz.md>")
@@ -254,6 +396,13 @@ def main():
     graded = grade_quiz(parsed)
     generate_report(parsed, graded, output_path)
 
+    # Generate certificate if score >= 90%
+    cert_path = None
+    if graded["score_pct"] >= 90:
+        cert_filename = f"{base_name}_Certificate.html"
+        cert_path = os.path.join(results_dir, cert_filename)
+        generate_certificate(parsed, graded, cert_path)
+
     # Print summary to console
     print(f"\nQuiz: {parsed['title']}")
     print(f"Score: {graded['correct']}/{graded['total']} ({graded['score_pct']:.0f}%)")
@@ -262,6 +411,8 @@ def main():
     if graded["unanswered"]:
         print(f"Unanswered: {len(graded['unanswered'])} question(s)")
     print(f"\nFull report saved to: {output_path}")
+    if cert_path:
+        print(f"🏆 Certificate saved to: {cert_path}")
 
 
 if __name__ == "__main__":
