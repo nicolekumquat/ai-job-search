@@ -247,17 +247,19 @@ def generate_certificate(parsed: dict, graded: dict, output_path: str) -> str:
     if not topic or topic.lower() in ("all", "general", "everything"):
         topic = title
 
-    # Load a random Shelby image as base64
+    # Load the Shelby success image as base64 (preferred template style).
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    shelby_choice = random.choice(["SuccessShelby.png", "LearningShelby.png"])
-    image_path = os.path.join(script_dir, "Resources", shelby_choice)
+    image_path = os.path.join(script_dir, "Resources", "SuccessShelby.png")
     shelby_html = ""
     if os.path.exists(image_path):
         ext = os.path.splitext(image_path)[1].lower()
         mime = "image/png" if ext == ".png" else "image/jpeg"
         with open(image_path, "rb") as img_file:
             img_b64 = base64.b64encode(img_file.read()).decode("utf-8")
-        shelby_html = f'<img src="data:{mime};base64,{img_b64}" alt="Shelby" class="shelby-img">'
+        shelby_html = (
+            f'<img src="data:{mime};base64,{img_b64}" '
+            'alt="Shelby mascot" class="shelby-img">'
+        )
     else:
         # Fallback to any image in Resources/
         resources_dir = os.path.join(script_dir, "Resources")
@@ -272,14 +274,14 @@ def generate_certificate(parsed: dict, graded: dict, output_path: str) -> str:
                     shelby_html = f'<img src="data:{mime};base64,{img_b64}" alt="Shelby" class="shelby-img">'
                     break
         if not shelby_html:
-            shelby_html = '<div class="trophy">🏆</div>'
+            shelby_html = '<div class="trophy">S</div>'
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificate of Achievement</title>
+    <title>Certificate of Achievement - {title}</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500&display=swap');
 
@@ -290,17 +292,18 @@ def generate_certificate(parsed: dict, graded: dict, output_path: str) -> str:
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #0a1628 0%, #1a365d 100%);
+            background: radial-gradient(circle at top right, #1f3a5f 0%, #0c1b2f 55%, #07101d 100%);
             font-family: 'Inter', sans-serif;
             padding: 2rem;
+            color: #2c1810;
         }}
 
         .certificate {{
             background: #fffdf7;
             border: 3px solid #c9a84c;
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 3rem;
-            max-width: 700px;
+            max-width: 760px;
             width: 100%;
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
@@ -312,90 +315,133 @@ def generate_certificate(parsed: dict, graded: dict, output_path: str) -> str:
         .certificate::before {{
             content: '';
             position: absolute;
-            top: 12px; left: 12px; right: 12px; bottom: 12px;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
             border: 1px solid #e8d5a3;
-            border-radius: 6px;
+            border-radius: 8px;
             pointer-events: none;
         }}
 
         .header {{
             font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
+            font-size: 2.3rem;
             color: #2c1810;
-            margin-bottom: 0.3rem;
-            letter-spacing: 2px;
+            margin-bottom: 0.2rem;
+            letter-spacing: 1.4px;
         }}
 
         .subheader {{
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #8b7355;
             text-transform: uppercase;
             letter-spacing: 3px;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }}
 
         .shelby-img {{
-            width: 180px;
-            height: 180px;
+            width: 160px;
+            height: 160px;
             object-fit: cover;
             border-radius: 50%;
             border: 4px solid #c9a84c;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            margin-bottom: 1.1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.14);
         }}
 
         .trophy {{
             font-size: 5rem;
-            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: #c9a84c;
+            margin-bottom: 1.1rem;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
         }}
 
-        .quiz-name {{
-            font-size: 1.1rem;
+        .course {{
+            font-size: 1.04rem;
             color: #5a4a3a;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
         }}
 
         .score {{
-            font-size: 2.5rem;
+            font-size: 2.7rem;
             font-weight: 700;
             color: #c9a84c;
-            margin: 1rem 0;
+            margin: 0.8rem 0 0.2rem 0;
+        }}
+
+        .status {{
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #246c3e;
+            margin-bottom: 0.9rem;
+            text-transform: uppercase;
+        }}
+
+        .details {{
+            margin: 1rem auto;
+            max-width: 520px;
+            text-align: left;
+            background: #fffaf0;
+            border: 1px solid #ecd9a8;
+            border-radius: 10px;
+            padding: 0.9rem 1rem;
+        }}
+
+        .details li {{
+            margin-left: 1.1rem;
+            margin-bottom: 0.35rem;
+            color: #5a4a3a;
+            font-size: 0.95rem;
         }}
 
         .message {{
             font-size: 1rem;
             color: #5a4a3a;
             font-style: italic;
-            margin: 1.5rem 2rem;
-            line-height: 1.6;
+            margin: 1.1rem 2rem 0.8rem 2rem;
+            line-height: 1.5;
         }}
 
         .date {{
-            font-size: 0.85rem;
+            font-size: 0.86rem;
             color: #8b7355;
-            margin-top: 2rem;
+            margin-top: 1.2rem;
         }}
 
         .footer {{
-            margin-top: 1rem;
-            font-size: 0.75rem;
+            margin-top: 0.6rem;
+            font-size: 0.74rem;
             color: #b8a88a;
+        }}
+
+        @media (max-width: 700px) {{
+            .certificate {{ padding: 2rem 1.3rem; }}
+            .header {{ font-size: 1.8rem; }}
+            .score {{ font-size: 2.1rem; }}
+            .message {{ margin: 1rem 0.7rem; }}
         }}
     </style>
 </head>
 <body>
-    <div class="certificate">
+    <main class="certificate">
         <div class="header">Certificate of Achievement</div>
-        <div class="subheader">Study Topics</div>
+        <div class="subheader">AI Job Search Study Workflow</div>
         {shelby_html}
-        <div class="quiz-name">Excellence demonstrated in</div>
-        <div class="quiz-name"><strong>{topic}</strong></div>
+        <div class="course">{topic}</div>
         <div class="score">{score:.0f}%</div>
+        <div class="status">Passed - Certificate Awarded</div>
+        <ul class="details">
+            <li>Passing threshold: 90%</li>
+            <li>Completion date: {datetime.now(timezone.utc).strftime('%Y-%m-%d')}</li>
+            <li>Gate check result: Eligible to advance to next drill phase</li>
+        </ul>
         <div class="message">"{message}"</div>
-        <div class="date">{now}</div>
-        <div class="footer">Awarded by your AI Study System</div>
-    </div>
+        <div class="date">Issued on {now}</div>
+        <div class="footer">Generated by Shelby Study Assistant Workflow.</div>
+    </main>
 </body>
 </html>"""
 
@@ -415,10 +461,25 @@ def main():
         print(f"Error: File not found: {input_path}")
         sys.exit(1)
 
-    # Determine output path
+    # Determine output root.
+    # Prefer the Study-Topics folder associated with the input quiz path.
+    # Falls back to this script's directory for backward compatibility.
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    results_dir = os.path.join(script_dir, "Results")
+    abs_input = os.path.abspath(input_path)
+    input_quizzes_dir = os.path.dirname(abs_input)
+    input_completed_dir = os.path.dirname(input_quizzes_dir)
+    derived_study_root = script_dir
+
+    if (
+        os.path.basename(input_quizzes_dir).lower() == "quizzes"
+        and os.path.basename(input_completed_dir).lower() == "completed"
+    ):
+        derived_study_root = os.path.dirname(input_completed_dir)
+
+    results_dir = os.path.join(derived_study_root, "Results")
+    certificates_dir = os.path.join(derived_study_root, "Completed", "Certificates")
     os.makedirs(results_dir, exist_ok=True)
+    os.makedirs(certificates_dir, exist_ok=True)
 
     base_name = os.path.splitext(os.path.basename(input_path))[0]
     output_path = os.path.join(results_dir, f"{base_name}_Results.md")
@@ -437,8 +498,9 @@ def main():
     # Generate certificate if score >= 90%
     cert_path = None
     if graded["score_pct"] >= 90:
-        cert_filename = f"{base_name}_Certificate.html"
-        cert_path = os.path.join(results_dir, cert_filename)
+        cert_stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M")
+        cert_filename = f"{base_name}_certificate_{cert_stamp}.html"
+        cert_path = os.path.join(certificates_dir, cert_filename)
         generate_certificate(parsed, graded, cert_path)
 
     # Print summary to console

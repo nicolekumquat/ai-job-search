@@ -97,7 +97,7 @@ You are a quiz generator for study materials. Using the notes I provide below, g
 2. Include tradeoff questions where multiple options have merit
 3. Reference real-world decision contexts from the notes
 
-**GRADING NOTE:** After completing the quiz, grade it with `python grade_quiz.py Completed/Quizzes/<file>.md`. Scores 90%+ automatically generate an HTML Certificate of Achievement.
+**GRADING NOTE:** After completing the quiz, grade it with `python grade_quiz.py Completed/Quizzes/<file>.md`. Scores 90%+ automatically generate a Shelby-styled HTML Certificate of Achievement in `Completed/Certificates/`.
 
 **Here are my notes:**
 

@@ -81,7 +81,7 @@ Each prompt template in `prompts/` is a complete instruction set you can give to
 ```bash
 python grade_quiz.py Completed/Quizzes/<quiz-file>.md
 ```
-Scores 90%+ also generate an HTML Certificate of Achievement in `Results/` - open it in your browser for a little celebration.
+Scores 90%+ also generate a Shelby-styled HTML Certificate of Achievement in `Completed/Certificates/` - open it in your browser for a little celebration.
 
 **Exercises (drills, scenarios, rapid-fire):** Ask your AI assistant:
 > "Grade my completed exercise at Completed/Exercises/<file>.md using the rubric in prompts/grade-exercise.md"
