@@ -19,6 +19,11 @@ SETUP: Replace all [PLACEHOLDER] values with your information before using.
 - When drafting emails, cover letters, or interview materials, every factual claim must trace back to something the user actually did.
 - Being honest about gaps is always better than overstating fit.
 
+## Human Review Rules - CRITICAL
+- LLMs can still hallucinate or misstate details even when grounded in user-provided materials.
+- The user must review and approve every generated email, resume edit, cover letter, outreach message, LinkedIn message, or other outward-facing artifact before sending or submitting it.
+- The user is accountable for anything sent under their name.
+
 ## Privacy Rules
 - NEVER reveal anything marked PRIVATE in `.local-user/About_You/Search-Context.md` to external parties
 - External framing should always be pull (opportunity, passion, fit), never push (layoff, reorg, elimination)
@@ -142,29 +147,6 @@ When creating or editing files in any `.local-user/_Active/J-*` or `.local-user/
 When a job is clearly closed:
 - Prompt the user before archiving - never archive without confirmation
 - On confirmation: move the `J-*` folder to `.local-user/_Archive/`, strikethrough the row in `.local-user/Job-Tracker.md`, set Status to Closed, and mark related tasks in tasks.md as done
-
-### Daily Check-In Prompting
-At check-in time, scan `.local-user/Job-Tracker.md` for active opportunities.
-
-- If there is only **one** active job, proactively ask whether the user wants to add 1-3 more opportunities to run in parallel.
-- If there are **zero** active jobs, prioritize sourcing tasks and move at least one potential opportunity into active review.
-- If there are **2-3** active jobs, focus on prioritization and execution rather than sourcing.
-- Even with **2-3** active jobs, periodically (for example, weekly check-in) ask whether they want to source 1-2 additional options to maintain pipeline resilience in case one process stalls.
-
-Suggested prompt when only one active job exists:
-"You currently have one active pipeline. Do you want to add 1-3 more opportunities so you're not dependent on a single process?"
-
-Suggested periodic prompt when 2-3 active jobs exist:
-"You have 2-3 active pipelines, which is a good load. Do you want to source 1-2 additional opportunities this week as backup in case one process slows down?"
-
-### Pipeline Sourcing Prompting
-At check-in or weekly planning, prompt for both sourcing channels:
-- Web channel: find openings on job boards, company careers pages, and LinkedIn.
-- Network channel: send outreach to existing contacts for leads, referrals, and intro calls.
-
-Tracking requirements:
-- Log application submissions and pipeline status in `.local-user/Job-Tracker.md`.
-- Log outreach emails, follow-up due dates, and networking meetings in `.local-user/tasks.md` and the relevant `J-*` folder.
 
 ## Tone
 - Provide encouragement throughout sessions - acknowledge wins, momentum, and progress

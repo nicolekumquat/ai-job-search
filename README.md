@@ -2,15 +2,8 @@
 
 Welcome to this open-source, AI-assisted framework for managing a job search. Profile-first, accuracy-constrained, voice-calibrated.
 
-<p align="center">
-	<img src="Study-Topics/Resources/SuccessShelby.png" alt="Shelby mascot" width="220" />
-  <img src="Study-Topics/Resources/Jeeves-serious.png" alt="Jeeves mascot" width="220" />
-</p>
-
-<p align="center">
-	<strong>Shelby</strong> - Study assistant for learning plans, drills, and confidence building.<br/>
-	<strong>Jeeves</strong> - Job-search coordinator for check-ins, prioritization, and pipeline strategy.
-</p>
+![Shelby says hello](Study-Topics/Resources/SuccessShelby.png)
+(Shelby says hello!)
 
 This isn't a resume builder or a job board. It's a structured system that teaches any LLM to be your job search partner - one that knows your real strengths, writes in your voice, scores opportunities against your priorities, and prepares you for interviews with targeted study plans.
 
@@ -139,6 +132,8 @@ Raw per-interviewer notes should also live in the job folder as they happen, for
 
 **Accuracy-constrained.** The system is configured to never fabricate, embellish, or infer details about your experience. Every claim in a generated email or fit analysis must trace back to your source files. Gaps get flagged, not filled with invention.
 
+**Human-review required.** LLMs can still hallucinate or misstate details, even in a profile-first workflow with strict source grounding. You must read and approve every generated email, resume edit, cover letter, LinkedIn message, or other outward-facing artifact before sending or submitting it. The final accountability for what goes out under your name stays with you.
+
 **Voice-calibrated.** AI-drafted materials match your actual writing style, not generic corporate prose. The authenticity rubric scores drafts against your real voice.
 
 **LLM-agnostic.** The templates and methodology work with any AI assistant. The `.github/copilot-instructions.md` file is optimized for VS Code + GitHub Copilot, but the same rules can be adapted as a system prompt for Claude, ChatGPT, or any other LLM.
@@ -167,24 +162,6 @@ npx playwright install chromium
 Then open the workspace in VS Code (or your editor of choice with AI assistance) and start a conversation with your AI assistant. The instructions file teaches it how to help you.
 
 For privacy: do your real job-search execution under `.local-user/` instead of editing framework files directly.
-
-## Included Custom Agents
-
-Workspace-scoped custom agents are included under `.github/agents/`:
-
-- `Job-Jeeves-Coordinator`: chief-of-staff style assistant for daily and weekly check-ins, workflow-stage orientation, follow-up tracking, pipeline sufficiency checks, network-outreach prompting, and periodic strategic market/role recalibration
-- `Job-Shelby-Study-Assistant`: encouraging learning coach for interview-focused concept mastery, drills, confidence-building reps, and study tool selection (including StudySort when useful)
-
-In VS Code Copilot Chat, use the agent picker to switch between them based on the task.
-Both agents begin with a short self-introduction and example prompt suggestions.
-Routing rule: if you ask about training or learning, use `Job-Shelby-Study-Assistant`.
-
-Example invocation style:
-- "Jeeves, what's next?"
-- "Jeeves, run my weekly check-in."
-- "Jeeves, run a strategic reset for my pipeline this week."
-- "Shelby, help me study for this interview."
-- "Shelby, give me a 60-minute prep block for system design."
 
 ## Folder Structure
 
