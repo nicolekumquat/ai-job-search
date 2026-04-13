@@ -29,6 +29,7 @@ Use `.local-user/` for your real profile content, live applications, trackers, i
 
 Use the tracked framework files in this repo as reference templates.
 The suggested layout is documented in `.local-user-sample/README.md` — you'll find a realistic worked example there showing a complete job search cycle.
+The suggested layout is documented in `local-user-template/README.md`.
 
 ## Step 2: Fill In Your Profile
 
@@ -86,14 +87,6 @@ Also preserve the two-mode boundary:
 - Toolkit improvements should be submitted as GitHub Issues first (PR optional).
 
 ## Step 6: Start Searching
-
-Use a dual-channel sourcing approach:
-- **Web sourcing:** job boards, LinkedIn, and company career pages
-- **Network sourcing:** former colleagues, managers, mentors, and trusted contacts who can provide leads or referrals
-
-Track both channels in `.local-user/`:
-- Log job applications and status in `.local-user/Job-Tracker.md`
-- Log outreach emails, follow-up dates, and networking meetings in `.local-user/tasks.md` and the relevant `J-*` folder
 
 ### Option A: LinkedIn Scraping Pipeline
 ```bash
@@ -212,49 +205,10 @@ Create a `.local-user/tasks.md` file to track next steps across all your active 
 
 This format is optional but recommended. It works with common task dashboards if you want to add one later.
 
-## Step 10: Set Up Daily Reminder Email (Optional)
-
-If you want an overnight reminder email from your `.local-user/tasks.md` and `.local-user/Job-Tracker.md`, run this one-liner from the repo root:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\setup-reminder-task.ps1 -To "you@example.com"
-```
-
-What this does:
-- Creates a Windows Scheduled Task (`AIJobSearch-Reminder`)
-- Runs daily at 06:30 by default
-- Sends a simple status email using `scripts/job-reminder.ps1`
-
-Customize time (optional):
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\setup-reminder-task.ps1 -To "you@example.com" -Time "07:15"
-```
-
-Remove the scheduled reminder task (optional):
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\remove-reminder-task.ps1
-```
-
-## Step 11: Use the Built-In Agents (Optional)
-
-This repo now includes two custom Copilot agents in `.github/agents/`:
-- `Job-Jeeves-Coordinator` - your chief-of-staff style job-search assistant for check-ins, prioritization, follow-ups, and pipeline balance
-- `Job-Shelby-Study-Assistant` - your encouraging learning coach for study plans, drills, and interview-readiness reps
-
-How to use them in VS Code Copilot Chat:
-1. Open the agent selector in chat.
-2. Choose `Job-Jeeves-Coordinator` for planning and execution rhythm.
-3. Choose `Job-Shelby-Study-Assistant` for focused learning sessions.
-
 ## Ongoing
 
 - Keep `.local-user/Job-Tracker.md` current with status and last actions
 - Update `.local-user/tasks.md` as you progress through interviews, offers, and decisions
-- Track networking actions as first-class pipeline work (outreach sent, follow-up due dates, and meeting outcomes), not just application submissions
-- During check-ins: if you only have one active job, ask whether to add 1-3 additional opportunities in parallel to reduce single-pipeline risk
-- During weekly check-ins: even with 2-3 active jobs, consider sourcing 1-2 additional opportunities as backup in case one pipeline slows or closes
 - Archive closed opportunities by moving folders from `.local-user/_Active/` to `.local-user/_Archive/`
 - When you get an offer, use the fit analysis and rubric scores to compare and decide
 - Review your Gap-Log before every interview to stay prepared on weak areas

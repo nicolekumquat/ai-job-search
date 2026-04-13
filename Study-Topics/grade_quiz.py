@@ -247,7 +247,7 @@ def generate_certificate(parsed: dict, graded: dict, output_path: str) -> str:
     if not topic or topic.lower() in ("all", "general", "everything"):
         topic = title
 
-    # Load the Shelby success image as base64 (preferred template style).
+    # Load the Shelby success image as base64 (preferred pretty template style).
     script_dir = os.path.dirname(os.path.abspath(__file__))
     image_path = os.path.join(script_dir, "Resources", "SuccessShelby.png")
     shelby_html = ""
