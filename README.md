@@ -12,10 +12,6 @@ Welcome to this open-source, AI-assisted framework for managing a job search. Pr
 	<strong>Jeeves</strong> - Job-search coordinator for check-ins, prioritization, and pipeline strategy.
 </p>
 
-Workspace-scoped custom agents are included under `.github/agents/`.
-In VS Code Copilot Chat, use the agent picker to switch between them based on the task.
-Both agents begin with a short self-introduction and example prompt suggestions.
-
 This isn't a resume builder or a job board. It's a structured system that teaches any LLM to be your job search partner - one that knows your real strengths, writes in your voice, scores opportunities against your priorities, and prepares you for interviews with targeted study plans.
 
 ## Framework vs Personal Workspace
@@ -231,6 +227,10 @@ For user feedback from real usage:
 - Open a GitHub Issue with the improvement idea or pain point.
 - Optional: include a PR for framework-only changes.
 - Do not include personal job-search content in Issues or PRs.
+
+## About the Agents
+
+Workspace-scoped custom agents are included under .github/agents/. In VS Code Copilot Chat, use the agent picker to switch between them based on the task. Both agents begin with a short self-introduction and example prompt suggestions.
 
 ## License
 
