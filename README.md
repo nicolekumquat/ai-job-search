@@ -2,13 +2,19 @@
 
 Welcome to this open-source, AI-assisted framework for managing a job search. Profile-first, accuracy-constrained, voice-calibrated.
 
-<img src="Study-Topics/Resources/SuccessShelby.png" alt="Shelby says hello" width="180" />
-(Shelby says hello!)
-Role: Shelby is your study assistant for interview readiness, drills, and focused learning plans.
+<p align="center">
+	<img src="Study-Topics/Resources/SuccessShelby.png" alt="Shelby mascot" width="220" />
+  <img src="Study-Topics/Resources/Jeeves-serious.png" alt="Jeeves mascot" width="220" />
+</p>
 
-<img src="Study-Topics/Resources/Jeeves.png" alt="Jeeves says hello" width="180" />
-(Jeeves says hello!)
-Role: Jeeves is your job-search coordinator for planning, prioritization, and follow-up tracking.
+<p align="center">
+	<strong>Shelby</strong> - Study assistant for learning plans, drills, and confidence building.<br/>
+	<strong>Jeeves</strong> - Job-search coordinator for check-ins, prioritization, and pipeline strategy.
+</p>
+
+Workspace-scoped custom agents are included under `.github/agents/`.
+In VS Code Copilot Chat, use the agent picker to switch between them based on the task.
+Both agents begin with a short self-introduction and example prompt suggestions.
 
 This isn't a resume builder or a job board. It's a structured system that teaches any LLM to be your job search partner - one that knows your real strengths, writes in your voice, scores opportunities against your priorities, and prepares you for interviews with targeted study plans.
 
