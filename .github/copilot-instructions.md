@@ -74,6 +74,8 @@ Read `.local-user/About_You/_INDEX.md` for a routing table to source-of-truth fi
 ## Document Conventions
 - All generated documents must include `*Generated on YYYY-MM-DD*` on the line immediately after the `#` heading
 - Reference material (job descriptions, emails from others) does NOT get a generated date
+- When generating a Word artifact, use semantic heading and list styles where possible. Run `scripts/docx_pagination.py` before delivery to keep headings with their content, prevent list paragraphs from splitting, and enable widow/orphan control.
+- Do not keep entire experience sections together; that can create large blank areas. Pagination safeguards do not replace the user's visual review of the final DOCX or PDF.
 
 ## Job Folder Artifact Naming
 Inside each `.local-user/_Active/J-*` or `.local-user/_Potential/J-*` folder, use numbered filenames so artifacts sort in a stable order.

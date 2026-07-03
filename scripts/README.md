@@ -35,3 +35,13 @@ Creates `J-XX-CompanyName/01-Job-Description.md` for each scraped job. Then tria
 - LinkedIn requires manual login (no credential automation)
 - LinkedIn's DOM changes periodically - selectors may need updating
 - Scraping results are gitignored (regenerable data)
+
+## DOCX Pagination Safeguards
+
+`docx_pagination.py` is an optional, standard-library utility for improving
+pagination in generated Word documents. It keeps headings with following
+content, keeps individual list paragraphs intact, and enables widow/orphan
+control without changing document text or removing intentional page breaks.
+
+See [DOCX Pagination Safeguards](../docs/DOCX-Pagination.md) for usage and
+review guidance.
