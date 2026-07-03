@@ -120,6 +120,7 @@ Use numbered filenames so files stay ordered as the folder grows. Recommended ba
 - `30-Rubric-Score.md`
 - `35-Study-Plan.md`
 - `40-Outreach-Email.md`
+- `45-Workday-Supplement.md`
 - `50-Customer-Value-Stories.md`
 - `60-Interview-Prep.md`
 - `65-Mock-Interview-Packet.md`
@@ -142,6 +143,7 @@ For each active opportunity, ask your AI assistant to:
 7. **Capture raw per-interviewer notes** in the job folder as they happen (for example `Interview note - Bob.md`)
 8. **Merge and lightly clean interview notes** → use `templates/Interview-Notes.md` for the structured roll-up (preserve every note fragment, even if unclear)
 9. **Draft outreach** → use `templates/Outreach-Email.md`
+10. **Fill application forms** (Workday and similar ATS) → use `templates/Workday-Supplement.md` to normalize employment, education, certification, and skills fields without introducing unsupported claims
 
 If interviewer names are available, include a LinkedIn/profile review pull-in in your interview prep artifact.
 

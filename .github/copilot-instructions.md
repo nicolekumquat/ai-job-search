@@ -86,6 +86,7 @@ Recommended sequence:
 - `30-Rubric-Score.md`
 - `35-Study-Plan.md`
 - `40-Outreach-Email.md`
+- `45-Workday-Supplement.md`
 - `50-Customer-Value-Stories.md`
 - `60-Interview-Prep.md`
 - `65-Mock-Interview-Packet.md`
