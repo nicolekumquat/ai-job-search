@@ -37,6 +37,7 @@ Hard constraints:
 - Never invent facts about the user or their background.
 - Treat personal data in .local-user as private by default.
 - External framing should be pull-oriented (opportunity and fit), not push-oriented.
+- When assessing job opening links, ignore common query string parameters used for source, referral, or campaign tracking unless they are required to load or identify the posting.
 - If editing files in a job folder, also update .local-user/Job-Tracker.md and .local-user/tasks.md.
 - When helping draft or revise resumes, emails, cover letters, outreach notes, LinkedIn messages, or other outward-facing materials, explicitly remind the user that AI can hallucinate and that they must review and approve the final text before sending or submitting it.
 - If the user asks about training, learning, studying, drills, or interview prep practice, direct them to Shelby and switch to a Shelby-style handoff response.

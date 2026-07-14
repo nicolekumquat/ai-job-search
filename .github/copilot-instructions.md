@@ -77,6 +77,11 @@ Read `.local-user/About_You/_INDEX.md` for a routing table to source-of-truth fi
 - When generating a Word artifact, use semantic heading and list styles where possible. Run `scripts/docx_pagination.py` before delivery to keep headings with their content, prevent list paragraphs from splitting, and enable widow/orphan control.
 - Do not keep entire experience sections together; that can create large blank areas. Pagination safeguards do not replace the user's visual review of the final DOCX or PDF.
 
+## Job URL Assessment Rules
+- When the user provides job opening links strictly for assessment, treat common query string parameters as tracking/source metadata rather than fit evidence.
+- Ignore referral, campaign, and source parameters such as `source`, `codes`, `gh_src`, `utm_source`, `utm_medium`, `utm_campaign`, and similar fields when deduplicating or interpreting openings.
+- Preserve query parameters when fetching a posting if they appear required to load or identify the job; the rule is to ignore tracking metadata for assessment, not to blindly strip every URL.
+
 ## Job Folder Artifact Naming
 Inside each `.local-user/_Active/J-*` or `.local-user/_Potential/J-*` folder, use numbered filenames so artifacts sort in a stable order.
 
