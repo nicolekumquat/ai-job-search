@@ -52,6 +52,14 @@ Before creating or editing files, classify the request:
 1. If it helps an individual's job hunt, use `.local-user/` only.
 2. If it improves the toolkit for all users, open/update an Issue first, then optionally implement framework changes.
 
+## Job ID Allocation Rules - CRITICAL
+Duplicate `J-XX` IDs have occurred repeatedly when a session created packet folders without registering them in `Job-Tracker.md`, and a later session allocated IDs from the stale tracker.
+
+- A job packet is NOT complete until its row exists in `.local-user/Job-Tracker.md`. Creating the folder and registering the row are one atomic step — never defer the tracker row.
+- Before assigning a new J-ID, run `node scripts/next-job-id.js` (or, at minimum, take the max across BOTH `Job-Tracker.md` and the folder names under `_Active/`, `_Potential/`, and `_Archive/` — never the tracker alone).
+- If `next-job-id.js` reports folders missing tracker rows, add those rows before allocating any new ID.
+- These rules apply to every AI assistant and every parallel session working in this workspace.
+
 ## Writing Style
 When drafting materials for the user, follow the style guide in `.local-user/About_You/Writing-Style/Voice-Quick-Reference.md`:
 - Match the user's actual voice, not generic corporate prose
