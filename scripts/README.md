@@ -36,6 +36,30 @@ Creates `J-XX-CompanyName/01-Job-Description.md` for each scraped job. Then tria
 - LinkedIn's DOM changes periodically - selectors may need updating
 - Scraping results are gitignored (regenerable data)
 
+## Job ID Allocation & Drift Check
+
+`next-job-id.js` prevents duplicate `J-XX` IDs. IDs used to be allocated by
+reading `Job-Tracker.md` and taking max+1 — but folders and tracker rows are
+created in separate steps, so a session (human or AI agent) that creates packet
+folders without registering tracker rows leaves the tracker stale, and the next
+session re-issues the same IDs. This script scans **both** the tracker and the
+packet folders (`_Active/`, `_Potential/`, `_Archive/`), so an unregistered
+folder can never cause a collision.
+
+```bash
+node scripts/next-job-id.js           # print the next safe J-ID + drift warnings
+node scripts/next-job-id.js --check   # CI-style check; exit 1 on drift
+node scripts/next-job-id.js --json    # machine-readable output
+```
+
+Drift rules: a **folder without a tracker row is an error** (that's the
+collision hazard — add the row); a tracker row without a folder is only a
+warning (legitimate when a role was tracked without a packet or the packet was
+deliberately removed). Duplicate folder IDs across buckets are also errors.
+
+Always run this before assigning a new J-ID, and treat a packet as incomplete
+until its `Job-Tracker.md` row exists.
+
 ## DOCX Pagination Safeguards
 
 `docx_pagination.py` is an optional, standard-library utility for improving
