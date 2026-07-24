@@ -125,6 +125,7 @@ This example traces **one job opportunity (TechCorp) through the full 70-Intervi
 │   └── Gap-Log.md
 │
 ├── Job-Tracker.md                ← Portfolio view (status + history for ALL jobs)
+├── dashboard-config.json         ← Optional private career-portal overrides
 ├── tasks.md                      ← Task list (checkbox format, multi-job)
 └── [Your daily notes, reflection, etc.]
 ```
@@ -143,6 +144,8 @@ This example traces **one job opportunity (TechCorp) through the full 70-Intervi
 
 6. **Keep raw interview notes.** Never delete `.local-user/_Active/J-XX/Interview note - [Name].md` files after consolidating them into `70-Interview-Notes.md`. They're evidence of the interview and source material for follow-up.
 
+7. **Save the official posting URL.** Put the employer or ATS URL in `01-Job-Description.md`. A discovery URL such as LinkedIn can remain as a source, but the local posting checker needs the official URL when available.
+
 ## Workflow Integration
 
 Each job folder mirrors the artifact numbering scheme. As you progress through the lifecycle:
@@ -160,10 +163,12 @@ See `GETTING-STARTED.md` for step-by-step guidance on each phase.
 
 Single row per opportunity:
 ```
-| J-01 | HelioWorks | Principal PM | Active | Consolidated Bob/Hu/Nandy feedback; next: rehearse model-scoring answer | 2026-04-12 |
+| J-01 | HelioWorks | Principal Product Manager | Interviewing | Consolidated interview feedback; awaiting next round | 2026-04-12 | 2026-04-08 | 82% | Pending next-round schedule |
 ```
 
-Columns: ID, Company, Role, Status, Last Action, Date
+Columns: ID, Company, Role, Status, Last Action, Last Updated, Applied Date, Rubric Score, Interview Stage.
+
+Keep this exact header order if you want to use the private dashboard and its token-free **Refresh posting status** button.
 
 Update after each significant step (JD arrival, interview round, feedback received, decision made).
 
@@ -189,3 +194,4 @@ See `.github/copilot-instructions.md` for task format and MIRA integration rules
 3. Run the LinkedIn scraping pipeline or manually create first job folder
 4. Use framework templates as guides; adapt to your situation
 5. Keep `Job-Tracker.md` and `tasks.md` current as you work through opportunities
+6. Start the dashboard with `node scripts/run-job-dashboard.js` and open `http://127.0.0.1:4173/`

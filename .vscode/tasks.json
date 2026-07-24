@@ -1,0 +1,38 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start private job dashboard",
+      "type": "process",
+      "command": "node",
+      "args": [
+        "scripts/run-job-dashboard.js"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "runOptions": {
+        "runOn": "folderOpen",
+        "instanceLimit": 1
+      },
+      "problemMatcher": {
+        "owner": "job-dashboard",
+        "pattern": {
+          "regexp": "^(?!.*)$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^Job dashboard available at ",
+          "endsPattern": "^Job dashboard available at "
+        }
+      },
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "careerPortalOverrides": {
+    "TechCorp": "https://careers.your-company.example/candidate-home"
+  }
+}

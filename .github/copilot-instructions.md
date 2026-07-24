@@ -133,7 +133,15 @@ Leave the 90s available for late-stage docs such as:
 ### Job-Tracker.md
 `.local-user/Job-Tracker.md` tracks **status and history** for each opportunity (who, what role, last action, date, status). It does NOT contain tasks or next steps.
 
-Format: One row per job with columns for ID, Company, Role, Status, Last Action, Date, Rubric Score, Interview Stage.
+Format: One row per job with columns for ID, Company, Role, Status, Last Action, Last Updated, Applied Date, Rubric Score, Interview Stage. Preserve the original Applied Date when status or interview details change.
+
+### Local dashboard and posting refresh
+- The local dashboard is generated from `.local-user/Job-Tracker.md`; the tracker remains the source of truth.
+- When the user asks to refresh Applied and Waiting postings, use the local deterministic checker (`node scripts/refresh-applied-postings.js`) or the dashboard button. This workflow does not require an AI model.
+- Mark a posting closed only for definitive employer/ATS evidence: HTTP 404/410 or explicit text that the job is closed, filled, removed, expired, or no longer accepting applications.
+- Treat login walls, bot challenges, HTTP 401/403/429/5xx, timeouts, DNS failures, sparse pages, and unexplained redirects as inconclusive. Do not change the tracker or move a folder for inconclusive results.
+- A confirmed posting closure uses Status `Closed - posting closed`, preserves Applied Date, sets Last Updated to the verification date, sets Interview Stage to `Closed`, and moves the packet from `.local-user/_Active/` to `.local-user/_Archive/`.
+- Posting closure means the official posting is unavailable; it is not evidence that the employer sent an explicit rejection.
 
 ### tasks.md
 `.local-user/tasks.md` is the **task list** for next steps and follow-ups across all jobs.
@@ -155,14 +163,15 @@ You can use tasks.md with any task manager (Notion, Obsidian, MIRA, paper checkl
 ### After editing files in a job folder
 When creating or editing files in any `.local-user/_Active/J-*` or `.local-user/_Potential/J-*` folder:
 1. Read the new/changed content. Detect actions taken, status changes, and follow-up tasks.
-2. **Update Job-Tracker.md**: Update the matching row's Last Action, Date, and Status columns.
+2. **Update Job-Tracker.md**: Update the matching row's Last Action, Last Updated, and Status columns. Preserve Applied Date unless the user has just submitted the application.
 3. **Update tasks.md**: Add new tasks under the appropriate heading. Use priority prefixes (P1/P2) and @due dates.
 4. Don't duplicate existing tasks. If an existing task is superseded, mark it done by changing `- [ ]` to `- [x]`.
 
 ### Archiving
 When a job is clearly closed:
 - Prompt the user before archiving - never archive without confirmation
-- On confirmation: move the `J-*` folder to `.local-user/_Archive/`, strikethrough the row in `.local-user/Job-Tracker.md`, set Status to Closed, and mark related tasks in tasks.md as done
+- Confirmation in the dashboard's posting-refresh dialog authorizes archiving only for postings that meet the definitive closure rules above
+- On confirmation: move the `J-*` folder to `.local-user/_Archive/`, retain its tracker row and set the appropriate `Closed - ...` Status, and mark related tasks in tasks.md as done
 
 ## Tone
 - Provide encouragement throughout sessions - acknowledge wins, momentum, and progress

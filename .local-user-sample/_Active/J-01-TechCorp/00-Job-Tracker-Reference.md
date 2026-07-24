@@ -2,11 +2,11 @@
 
 *Generated on 2026-04-12 — Example of multi-job tracking format*
 
-| ID | Company | Role | Level | Status | Last Action | Date | Rubric Score | Interview Stage |
+| ID | Company | Role | Status | Last Action | Last Updated | Applied Date | Rubric Score | Interview Stage |
 |---|---|---|---|---|---|---|---|---|
-| J-01 | TechCorp | Principal PM, AI Platform | Principal | Active - Interviews | Sent thank-you emails to 3 interviewers; next: awaiting feedback on Round 1 | 2026-04-12 | 74% | After Round 1, awaiting second-round schedule |
-| J-02 | BrandiKane | Senior Product Manager, AI Platform | Senior | Active - Outreach Sent | Applied to role and sent referral request email to former colleague; next follow-up due in 2 weeks | 2026-04-12 | — | Applied; waiting on referral response |
-| J-03 | StartupXYZ | Senior PM, Product | Senior | Potential | Marked as hold; revisit if J-01/J-02 don't progress | 2026-04-10 | 68% | On hold |
+| J-01 | TechCorp | Principal Product Manager, AI Platform | Interviewing | Sent thank-you emails to three interviewers; awaiting feedback on Round 1 | 2026-04-12 | 2026-04-08 | 74% | After Round 1, awaiting second-round schedule |
+| J-02 | BrandiKane | Senior Product Manager, AI Platform | Applied | Applied and sent a referral request; next follow-up due in two weeks | 2026-04-12 | 2026-04-12 | — | Waiting |
+| J-03 | StartupXYZ | Senior Product Manager | Active | Packet started; application not submitted | 2026-04-10 | | 68% | Ready - awaiting submission |
 
 ---
 

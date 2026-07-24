@@ -11,18 +11,30 @@ git clone https://github.com/nicolekumquat/ai-job-search.git
 cd ai-job-search
 ```
 
-If you plan to use the LinkedIn scraping scripts:
+If you plan to use the LinkedIn scraping scripts or the dashboard's local posting checker:
 ```bash
-npm install playwright
+npm install
 npx playwright install chromium
 ```
 
 ## Step 1.5: Create Your Private Local Workspace
 
-Create a local-only folder for personal job-search execution:
+Create a local-only folder for personal job-search execution. The commands below initialize the dashboard-compatible tracker and configuration.
+
+PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force .local-user, .local-user/_Active, .local-user/_Potential, .local-user/_Archive
+Copy-Item local-user-template/Job-Tracker.md .local-user/Job-Tracker.md
+Copy-Item local-user-template/dashboard-config.json .local-user/dashboard-config.json
+```
+
+macOS/Linux:
 
 ```bash
-mkdir .local-user
+mkdir -p .local-user/{_Active,_Potential,_Archive}
+cp local-user-template/Job-Tracker.md .local-user/Job-Tracker.md
+cp local-user-template/dashboard-config.json .local-user/dashboard-config.json
 ```
 
 Use `.local-user/` for your real profile content, live applications, trackers, interview notes, and study outputs. This folder is gitignored and should never be committed.
@@ -129,6 +141,20 @@ Use numbered filenames so files stay ordered as the folder grows. Recommended ba
 - `80-Post-Interview-Thank-You.md`
 
 Leave the 90s open for late-stage artifacts such as `90-Offer-Packet-Review.md`, `95-Negotiation-Plan.md`, and `98-Decision.md`.
+
+### Option C: Use the Local Dashboard
+
+Start the private dashboard:
+
+```bash
+node scripts/run-job-dashboard.js
+```
+
+Open `http://127.0.0.1:4173/`. The dashboard is generated from `.local-user/Job-Tracker.md` and separates applications into Interviewing, Applied and Waiting, and Rejected tabs.
+
+The **Refresh posting status** button in Applied and Waiting checks the official job URLs saved in each packet. It runs locally without an AI model and moves a packet to `_Archive/` only when the employer or ATS gives definitive closure evidence. Authentication walls, bot checks, rate limits, server errors, timeouts, and unexplained redirects remain unchanged and are reported as inconclusive.
+
+See [Local Job Dashboard](docs/Local-Job-Dashboard.md) for the complete setup and safety policy.
 
 ## Step 7: Analyze and Prepare
 
