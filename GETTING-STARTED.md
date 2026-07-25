@@ -152,7 +152,9 @@ node scripts/run-job-dashboard.js
 
 Open `http://127.0.0.1:4173/`. The dashboard is generated from `.local-user/Job-Tracker.md` and separates applications into Interviewing, Applied and Waiting, and Rejected tabs.
 
-The **Refresh posting status** button in Applied and Waiting checks the official job URLs saved in each packet. It runs locally without an AI model and moves a packet to `_Archive/` only when the employer or ATS gives definitive closure evidence. Authentication walls, bot checks, rate limits, server errors, timeouts, and unexplained redirects remain unchanged and are reported as inconclusive.
+The **Refresh posting status** button in Applied and Waiting checks the explicitly labelled official job URL saved in each packet. Add it to `01-Job-Description.md` as `**Official Job URL:** https://...`; packets without that label are skipped rather than matched to another link.
+
+The check runs locally without an AI model and only proposes possible closures. It does not change the tracker or move a packet. Review each proposal and its evidence, select the applications you want to close, and confirm the archive action. Authentication walls, bot checks, rate limits, server errors, timeouts, unexplained redirects, and unconfirmed proposals remain unchanged.
 
 See [Local Job Dashboard](docs/Local-Job-Dashboard.md) for the complete setup and safety policy.
 

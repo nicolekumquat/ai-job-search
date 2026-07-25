@@ -133,7 +133,7 @@ See [Study-Topics/README.md](Study-Topics/README.md) for the full system referen
 | `.local-user/Job-Tracker.md` | Private source of truth for application status and history |
 | `.local-user/tasks.md` | Tasks and next steps (compatible with MIRA or any checkbox-based system) |
 | `scripts/run-job-dashboard.js` | Serves a private local dashboard with Interviewing, Applied and Waiting, and Rejected tabs |
-| `scripts/refresh-applied-postings.js` | Checks saved official posting URLs locally and archives only definitively closed postings |
+| `scripts/refresh-applied-postings.js` | Checks explicitly labelled official posting URLs locally and proposes possible closures for user confirmation |
 
 Raw per-interviewer notes should also live in the job folder as they happen, for example `Interview note - Bob.md`. Keep those originals, then merge the signal into the structured `70-Interview-Notes.md` artifact.
 

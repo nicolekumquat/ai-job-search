@@ -122,12 +122,10 @@ function findJobUrl(folder) {
   if (!fs.existsSync(descriptionPath)) return null;
   const source = fs.readFileSync(descriptionPath, 'utf8');
   const labeledUrl = source.match(
-    /(?:official\s+(?:job|posting)\s+url|employer\/ats\s+url)\s*:\s*(https?:\/\/[^\s)\]`]+)/i,
+    /^\s*(?:[-*]\s*)?(?:\*\*)?(?:official\s+(?:job|posting)\s+url|employer\/ats\s+url)\s*:\s*(?:\*\*)?\s*(https?:\/\/[^\s)\]`]+)/im,
   );
   if (labeledUrl) return labeledUrl[1].replace(/[.,;:]+$/g, '');
-  const urls = [...source.matchAll(/https?:\/\/[^\s)\]`]+/g)]
-    .map((match) => match[0].replace(/[.,;:]+$/g, ''));
-  return urls.find((url) => !/linkedin\.com\/jobs/i.test(url)) || urls[0] || null;
+  return null;
 }
 
 function isGenericRedirect(originalUrl, finalUrl) {
@@ -151,7 +149,15 @@ function isGenericRedirect(originalUrl, finalUrl) {
   }
 }
 
-function classifyPostingEvidence({ status, text, originalUrl, finalUrl, error }) {
+function normalizedComparableText(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function classifyPostingEvidence({ status, text, originalUrl, finalUrl, jobTitle, error }) {
   if (error) {
     return { outcome: 'inconclusive', reason: error };
   }
@@ -161,6 +167,9 @@ function classifyPostingEvidence({ status, text, originalUrl, finalUrl, error })
   if (status === 401 || status === 403 || status === 429 || status >= 500) {
     return { outcome: 'inconclusive', reason: `HTTP ${status} is not closure evidence` };
   }
+  if (isGenericRedirect(originalUrl, finalUrl)) {
+    return { outcome: 'inconclusive', reason: `Posting redirected to a generic page: ${finalUrl}` };
+  }
 
   const normalizedText = String(text || '').replace(/\s+/g, ' ').trim();
   const blockedMatch = blockedPatterns.find((pattern) => pattern.test(normalizedText));
@@ -169,10 +178,20 @@ function classifyPostingEvidence({ status, text, originalUrl, finalUrl, error })
   }
   const closedMatch = closedPatterns.find((pattern) => pattern.test(normalizedText));
   if (closedMatch) {
-    return { outcome: 'closed', reason: `Employer/ATS page says: “${normalizedText.match(closedMatch)[0]}”` };
-  }
-  if (isGenericRedirect(originalUrl, finalUrl)) {
-    return { outcome: 'inconclusive', reason: `Posting redirected to a generic page: ${finalUrl}` };
+    const match = normalizedText.match(closedMatch);
+    const phraseNearTop = match.index < 500;
+    const comparableTitle = normalizedComparableText(jobTitle);
+    const comparablePage = normalizedComparableText(normalizedText);
+    const titleMissing = comparableTitle && !comparablePage.includes(comparableTitle);
+    if (phraseNearTop || titleMissing) {
+      const corroboration = phraseNearTop
+        ? 'closure notice appears near the start of the posting'
+        : `job title “${jobTitle}” is no longer present`;
+      return {
+        outcome: 'closed',
+        reason: `Employer/ATS page says “${match[0]}”; ${corroboration}`,
+      };
+    }
   }
   if (!status || status < 200 || status >= 400) {
     return { outcome: 'inconclusive', reason: `Unexpected HTTP status: ${status || 'none'}` };
@@ -205,7 +224,7 @@ async function createBrowserInspector() {
   });
 
   return {
-    async inspect(url) {
+    async inspect(url, job = {}) {
       const page = await context.newPage();
       try {
         const response = await page.goto(url, {
@@ -215,9 +234,18 @@ async function createBrowserInspector() {
         await page.waitForTimeout(750);
         const status = response ? response.status() : 0;
         const finalUrl = page.url();
-        const text = await page.locator('body').innerText({ timeout: 3000 }).catch(() => '');
+        const main = page.locator('main, [role="main"], article').first();
+        const text = await main.innerText({ timeout: 3000 })
+          .catch(() => page.locator('body').innerText({ timeout: 3000 }))
+          .catch(() => '');
         return {
-          ...classifyPostingEvidence({ status, text, originalUrl: url, finalUrl }),
+          ...classifyPostingEvidence({
+            status,
+            text,
+            originalUrl: url,
+            finalUrl,
+            jobTitle: job.role,
+          }),
           status,
           finalUrl,
         };
@@ -322,7 +350,9 @@ async function refreshAppliedPostings(options = {}) {
           id: row.id,
           company: row.company,
           role: row.role,
-          reason: !folder ? 'No unique _Active packet folder found' : 'No official job URL found',
+          reason: !folder
+            ? 'No unique _Active packet folder found'
+            : 'No labelled Official Job URL or Employer/ATS URL found',
         });
         return null;
       }
@@ -333,7 +363,7 @@ async function refreshAppliedPostings(options = {}) {
   const browserInspector = options.inspectPosting || jobs.length === 0
     ? null
     : await createBrowserInspector();
-  const inspectPosting = options.inspectPosting || ((url) => browserInspector.inspect(url));
+  const inspectPosting = options.inspectPosting || ((url, job) => browserInspector.inspect(url, job));
 
   let checked;
   try {
@@ -355,39 +385,100 @@ async function refreshAppliedPostings(options = {}) {
   }
 
   const detectedClosed = checked.filter((result) => result.outcome === 'closed');
-  const changed = options.dryRun
-    ? []
-    : archiveConfirmedClosures({
-      localRoot,
-      trackerPath,
-      tracker,
-      jobs,
-      closedResults: detectedClosed,
-      checkedDate,
-    });
-  const changedIds = new Set(changed.map((result) => result.id));
-  const closed = checked.filter((result) => changedIds.has(result.id));
   const live = checked.filter((result) => result.outcome === 'live');
-  const inconclusive = checked.filter((result) =>
-    result.outcome === 'inconclusive' ||
-    (result.outcome === 'closed' && !options.dryRun && !changedIds.has(result.id)),
-  );
+  const inconclusive = checked.filter((result) => result.outcome === 'inconclusive');
 
   return {
     checkedAt: new Date().toISOString(),
     checkedDate,
-    dryRun: Boolean(options.dryRun),
+    proposalOnly: true,
     totalApplied: tracker.rows.filter((row) => row.status.toLowerCase() === 'applied').length,
     checked: checked.length,
     live,
-    closed: options.dryRun ? detectedClosed : closed,
+    closed: detectedClosed,
     inconclusive,
     skipped,
   };
 }
 
+function confirmPostingClosures(options = {}) {
+  const repoRoot = path.resolve(options.repoRoot || defaultRepoRoot);
+  const localRoot = path.join(repoRoot, '.local-user');
+  const trackerPath = path.join(localRoot, 'Job-Tracker.md');
+  const checkedDate = options.checkedDate || localIsoDate();
+  const tracker = parseTracker(fs.readFileSync(trackerPath, 'utf8'));
+  const proposedResults = Array.isArray(options.closedResults) ? options.closedResults : [];
+  const confirmedIds = new Set(Array.isArray(options.confirmedIds) ? options.confirmedIds : []);
+  const selected = proposedResults.filter((result) => confirmedIds.has(result.id));
+  const jobs = [];
+  const inconclusive = [];
+
+  for (const result of selected) {
+    const row = tracker.rows.find((candidate) =>
+      candidate.id === result.id && candidate.status.toLowerCase() === 'applied');
+    const folder = row ? findActiveFolder(localRoot, row.id) : null;
+    const url = findJobUrl(folder);
+    if (!row || !folder || !url) {
+      inconclusive.push({
+        ...result,
+        outcome: 'inconclusive',
+        reason: !row
+          ? 'Application is no longer in Applied status'
+          : !folder
+            ? 'No unique _Active packet folder found'
+            : 'Labelled official job URL is missing',
+      });
+      continue;
+    }
+    if (url !== result.url) {
+      inconclusive.push({
+        ...result,
+        outcome: 'inconclusive',
+        reason: 'Official job URL changed after the check; refresh before confirming',
+      });
+      continue;
+    }
+    jobs.push({
+      id: row.id,
+      company: row.company,
+      role: row.role,
+      folder,
+      url,
+      row,
+    });
+  }
+
+  const eligibleResults = selected.filter((result) =>
+    jobs.some((job) => job.id === result.id));
+  const closed = archiveConfirmedClosures({
+    localRoot,
+    trackerPath,
+    tracker,
+    jobs,
+    closedResults: eligibleResults,
+    checkedDate,
+  });
+  const closedIds = new Set(closed.map((result) => result.id));
+  for (const result of eligibleResults) {
+    if (!closedIds.has(result.id)) {
+      inconclusive.push({
+        ...result,
+        outcome: 'inconclusive',
+      });
+    }
+  }
+
+  return {
+    checkedAt: new Date().toISOString(),
+    checkedDate,
+    confirmed: selected.length,
+    closed,
+    inconclusive,
+  };
+}
+
 if (require.main === module) {
-  refreshAppliedPostings({ dryRun: process.argv.includes('--dry-run') })
+  refreshAppliedPostings()
     .then((result) => {
       process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
     })
@@ -399,6 +490,7 @@ if (require.main === module) {
 
 module.exports = {
   classifyPostingEvidence,
+  confirmPostingClosures,
   findJobUrl,
   refreshAppliedPostings,
 };

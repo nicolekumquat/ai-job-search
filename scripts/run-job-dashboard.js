@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
 const { spawn, spawnSync } = require('child_process');
+const crypto = require('crypto');
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
-const { refreshAppliedPostings } = require('./refresh-applied-postings');
+const {
+  confirmPostingClosures,
+  refreshAppliedPostings,
+} = require('./refresh-applied-postings');
 
 const repoRoot = path.resolve(__dirname, '..');
 const localRoot = path.join(repoRoot, '.local-user');
@@ -12,6 +16,8 @@ const dashboardPath = path.join(localRoot, 'dashboard.html');
 const dashboardGeneratorPath = path.join(repoRoot, 'scripts', 'generate-job-dashboard.js');
 const port = Number(process.argv[2] || 4173);
 let refreshInProgress = false;
+let pendingClosureProposal = null;
+const proposalLifetimeMs = 15 * 60 * 1000;
 
 if (!Number.isInteger(port) || port < 1 || port > 65535) {
   console.error('Port must be an integer between 1 and 65535.');
@@ -47,6 +53,30 @@ function regenerateDashboard() {
     const details = [result.stderr, result.stdout].filter(Boolean).join('\n').trim();
     throw new Error(details || `Dashboard generator exited with status ${result.status}.`);
   }
+}
+
+function readJsonBody(request, maximumBytes = 16 * 1024) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    let size = 0;
+    request.on('data', (chunk) => {
+      size += chunk.length;
+      if (size > maximumBytes) {
+        reject(new Error('Request body is too large.'));
+        request.destroy();
+        return;
+      }
+      chunks.push(chunk);
+    });
+    request.on('end', () => {
+      try {
+        resolve(JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}'));
+      } catch {
+        reject(new Error('Request body must be valid JSON.'));
+      }
+    });
+    request.on('error', reject);
+  });
 }
 
 function resolvePrivatePath(relativePath) {
@@ -160,6 +190,83 @@ const server = http.createServer(async (request, response) => {
     refreshInProgress = true;
     try {
       const result = await refreshAppliedPostings({ repoRoot });
+      const proposalId = result.closed.length ? crypto.randomUUID() : null;
+      pendingClosureProposal = proposalId
+        ? {
+          id: proposalId,
+          createdAt: Date.now(),
+          closedResults: result.closed,
+        }
+        : null;
+      send(response, 200, 'application/json; charset=utf-8', JSON.stringify({
+        ...result,
+        proposalId,
+      }));
+    } catch (error) {
+      send(response, 500, 'application/json; charset=utf-8', JSON.stringify({
+        error: error.message,
+      }));
+    } finally {
+      refreshInProgress = false;
+    }
+    return;
+  }
+
+  if (request.method === 'POST' && requestUrl.pathname === '/confirm-posting-closures') {
+    if (!isTrustedDashboardRequest(request)) {
+      send(response, 403, 'application/json; charset=utf-8', JSON.stringify({
+        error: 'Posting-closure confirmations must come from the local dashboard.',
+      }));
+      return;
+    }
+    if (refreshInProgress) {
+      send(response, 409, 'application/json; charset=utf-8', JSON.stringify({
+        error: 'A posting refresh or confirmation is already running.',
+      }));
+      return;
+    }
+
+    refreshInProgress = true;
+    try {
+      const body = await readJsonBody(request);
+      const proposal = pendingClosureProposal;
+      if (!proposal || body.proposalId !== proposal.id) {
+        send(response, 409, 'application/json; charset=utf-8', JSON.stringify({
+          error: 'This closure proposal is no longer current. Refresh posting status again.',
+        }));
+        return;
+      }
+      if (Date.now() - proposal.createdAt > proposalLifetimeMs) {
+        pendingClosureProposal = null;
+        send(response, 409, 'application/json; charset=utf-8', JSON.stringify({
+          error: 'This closure proposal expired. Refresh posting status again.',
+        }));
+        return;
+      }
+
+      const confirmedIds = Array.isArray(body.confirmedIds)
+        ? [...new Set(body.confirmedIds.filter((id) => typeof id === 'string'))]
+        : [];
+      if (!confirmedIds.length) {
+        send(response, 400, 'application/json; charset=utf-8', JSON.stringify({
+          error: 'Select at least one proposed closure to confirm.',
+        }));
+        return;
+      }
+      const proposedIds = new Set(proposal.closedResults.map((result) => result.id));
+      if (confirmedIds.some((id) => !proposedIds.has(id))) {
+        send(response, 400, 'application/json; charset=utf-8', JSON.stringify({
+          error: 'The confirmation included a job that was not in this proposal.',
+        }));
+        return;
+      }
+
+      const result = confirmPostingClosures({
+        repoRoot,
+        confirmedIds,
+        closedResults: proposal.closedResults,
+      });
+      pendingClosureProposal = null;
       regenerateDashboard();
       send(response, 200, 'application/json; charset=utf-8', JSON.stringify(result));
     } catch (error) {

@@ -488,6 +488,15 @@ function renderDashboard(jobs) {
     .refresh-summary { margin:0; font-weight:750; }
     .refresh-detail { margin:7px 0 0; padding-left:20px; }
     .refresh-detail li + li { margin-top:4px; }
+    .closure-list { display:grid; gap:8px; margin:12px 0; }
+    .closure-option { display:grid; grid-template-columns:auto 1fr; gap:9px; align-items:start; padding:10px; border:1px solid #c8d8d0; border-radius:5px; background:#fff; }
+    .closure-option input { margin-top:3px; }
+    .closure-role, .closure-reason { display:block; margin-top:2px; color:var(--muted); font-size:12px; }
+    .closure-link { margin-left:6px; color:var(--blue); font-size:12px; font-weight:700; }
+    .closure-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .closure-action { min-height:36px; padding:0 12px; border:1px solid var(--blue); border-radius:5px; color:#fff; background:var(--blue); font-size:12px; font-weight:750; }
+    .closure-action.secondary { color:var(--blue); background:#fff; }
+    .closure-action:disabled { cursor:not-allowed; opacity:.55; }
     .table-wrap { overflow:auto; border:1px solid var(--line); border-radius:6px; background:var(--panel); }
     table { width:100%; min-width:980px; border-collapse:collapse; }
     thead { background:#edf0ee; }
@@ -805,25 +814,101 @@ function renderDashboard(jobs) {
         panel.innerHTML = '<p class="refresh-summary">' + escapeHtml(result.error || 'Posting refresh failed.') + '</p>';
         return;
       }
+      const live = result.live || [];
+      const closed = result.closed || [];
+      const inconclusive = result.inconclusive || [];
+      const skipped = result.skipped || [];
+      if (typeof result.confirmed === 'number') {
+        const details = [];
+        closed.forEach((item) => details.push('<li><strong>' + escapeHtml(item.id + ' ' + item.company) + '</strong> moved to Rejected as Posting Closed.</li>'));
+        inconclusive.forEach((item) => details.push('<li><strong>' + escapeHtml(item.id + ' ' + item.company) + ':</strong> ' + escapeHtml(item.reason) + '</li>'));
+        panel.innerHTML = '<p class="refresh-summary">' +
+          escapeHtml('Archived ' + closed.length + ' of ' + result.confirmed + ' confirmed posting' + (result.confirmed === 1 ? '' : 's') + '.') +
+          '</p>' + (details.length ? '<ul class="refresh-detail">' + details.join('') + '</ul>' : '');
+        return;
+      }
       const summary = [
         'Checked ' + result.checked + ' of ' + result.totalApplied + ' applied postings.',
-        result.live.length + ' live.',
-        result.closed.length + ' posting' + (result.closed.length === 1 ? '' : 's') + ' closed.',
-        result.inconclusive.length + ' inconclusive.',
-        result.skipped.length + ' skipped.',
+        live.length + ' live.',
+        inconclusive.length + ' inconclusive.',
+        skipped.length + ' skipped.',
       ].join(' ');
       const details = [];
-      result.closed.forEach((item) => details.push('<li><strong>' + escapeHtml(item.id + ' ' + item.company) + '</strong> moved to Rejected as Posting Closed.</li>'));
-      result.inconclusive.forEach((item) => details.push('<li><strong>' + escapeHtml(item.id + ' ' + item.company) + ':</strong> ' + escapeHtml(item.reason) + '</li>'));
-      result.skipped.forEach((item) => details.push('<li><strong>' + escapeHtml(item.id + ' ' + item.company) + ':</strong> ' + escapeHtml(item.reason) + '</li>'));
+      inconclusive.forEach((item) => details.push('<li><strong>' + escapeHtml(item.id + ' ' + item.company) + ':</strong> ' + escapeHtml(item.reason) + '</li>'));
+      skipped.forEach((item) => details.push('<li><strong>' + escapeHtml(item.id + ' ' + item.company) + ':</strong> ' + escapeHtml(item.reason) + '</li>'));
       panel.innerHTML = '<p class="refresh-summary">' + escapeHtml(summary) + '</p>' + (details.length ? '<ul class="refresh-detail">' + details.join('') + '</ul>' : '');
+    }
+    function showRefreshProposal(result) {
+      const proposed = result.closed || [];
+      if (!proposed.length) {
+        showRefreshResult(result);
+        return;
+      }
+      const panel = byId('refresh-panel');
+      panel.dataset.tone = 'success';
+      panel.hidden = false;
+      const options = proposed.map((item) =>
+        '<label class="closure-option"><input type="checkbox" name="confirmed-closure" value="' + escapeHtml(item.id) + '">' +
+        '<span><strong>' + escapeHtml(item.id + ' ' + item.company) + '</strong>' +
+        '<span class="closure-role">' + escapeHtml(item.role) +
+        '<a class="closure-link" href="' + escapeHtml(item.url) + '" target="_blank" rel="noreferrer">Review posting</a></span>' +
+        '<span class="closure-reason">' + escapeHtml(item.reason) + '</span></span></label>'
+      ).join('');
+      const otherDetails = [];
+      (result.inconclusive || []).forEach((item) => otherDetails.push('<li><strong>' + escapeHtml(item.id + ' ' + item.company) + ':</strong> ' + escapeHtml(item.reason) + '</li>'));
+      (result.skipped || []).forEach((item) => otherDetails.push('<li><strong>' + escapeHtml(item.id + ' ' + item.company) + ':</strong> ' + escapeHtml(item.reason) + '</li>'));
+      panel.innerHTML =
+        '<p class="refresh-summary">' + escapeHtml('Found ' + proposed.length + ' possible posting closure' + (proposed.length === 1 ? '' : 's') + '. Nothing has been changed.') + '</p>' +
+        '<p>Review the evidence and official posting before selecting any application to archive.</p>' +
+        '<div class="closure-list">' + options + '</div>' +
+        '<div class="closure-actions"><button class="closure-action" id="confirm-closures" type="button" disabled>Archive selected</button>' +
+        '<button class="closure-action secondary" id="dismiss-closures" type="button">Keep all active</button></div>' +
+        (otherDetails.length ? '<ul class="refresh-detail">' + otherDetails.join('') + '</ul>' : '');
+      const confirmButton = byId('confirm-closures');
+      const selectedIds = () => [...panel.querySelectorAll('input[name="confirmed-closure"]:checked')].map((input) => input.value);
+      panel.querySelectorAll('input[name="confirmed-closure"]').forEach((input) => input.addEventListener('change', () => {
+        confirmButton.disabled = selectedIds().length === 0;
+      }));
+      confirmButton.addEventListener('click', () => confirmPostingClosures(result, selectedIds()));
+      byId('dismiss-closures').addEventListener('click', () => {
+        panel.innerHTML = '<p class="refresh-summary">No applications were changed. All proposed closures remain active.</p>';
+      });
+    }
+    async function confirmPostingClosures(proposal, confirmedIds) {
+      if (!confirmedIds.length) return;
+      if (!window.confirm('Archive ' + confirmedIds.length + ' selected application' + (confirmedIds.length === 1 ? '' : 's') + ' as Posting Closed?')) return;
+      const button = byId('confirm-closures');
+      button.disabled = true;
+      button.textContent = 'Archiving selected…';
+      try {
+        const response = await fetch('/confirm-posting-closures', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Job-Dashboard-Action': 'refresh-postings',
+          },
+          body: JSON.stringify({
+            proposalId: proposal.proposalId,
+            confirmedIds,
+          }),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Posting closure confirmation failed.');
+        if (result.closed.length) {
+          window.sessionStorage.setItem('posting-refresh-result', JSON.stringify(result));
+          window.location.reload();
+          return;
+        }
+        showRefreshResult(result);
+      } catch (error) {
+        showRefreshResult({ error: error.message }, 'error');
+      }
     }
     async function refreshPostingStatus() {
       if (window.location.protocol !== 'http:' || window.location.hostname !== '127.0.0.1') {
         showRefreshResult({ error: 'Start the local dashboard server before refreshing posting status.' }, 'error');
         return;
       }
-      if (!window.confirm('Check every Applied posting now? Definitively closed postings will move to Rejected and their packet folders will move to _Archive.')) return;
       const button = byId('refresh-postings');
       const panel = byId('refresh-panel');
       button.disabled = true;
@@ -838,12 +923,7 @@ function renderDashboard(jobs) {
         });
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || 'Posting refresh failed.');
-        if (result.closed.length) {
-          window.sessionStorage.setItem('posting-refresh-result', JSON.stringify(result));
-          window.location.reload();
-          return;
-        }
-        showRefreshResult(result);
+        showRefreshProposal(result);
       } catch (error) {
         showRefreshResult({ error: error.message }, 'error');
       } finally {

@@ -55,7 +55,13 @@ Use the header in [`local-user-template/Job-Tracker.md`](../local-user-template/
 
 Keep one row per job ID. Job IDs must use the `J-01` pattern. Preserve the original Applied Date when later events change the status.
 
-Each application packet should live under `.local-user/_Active/J-XX-Company-Role/` and contain `01-Job-Description.md`. Include the official employer or ATS posting URL in that file. A LinkedIn URL may be retained as a discovery source, but the status checker should use the official URL when one is available.
+Each application packet should live under `.local-user/_Active/J-XX-Company-Role/` and contain `01-Job-Description.md`. Label the official employer or ATS posting URL explicitly:
+
+```markdown
+**Official Job URL:** https://careers.example.com/jobs/123
+```
+
+A LinkedIn URL may be retained as a discovery source, but the checker does not guess from arbitrary links. A packet without `Official Job URL:` or `Employer/ATS URL:` is skipped and reported for correction.
 
 The dashboard reads optional interview details from packet files, including `60-Interview-Prep.md` and structured interviewer schedule tables. Missing details remain visibly unspecified rather than being inferred.
 
@@ -77,7 +83,12 @@ Serving is required for opening packet files or folders and for the posting-stat
 
 ## Refresh applied postings
 
-In **Applied and waiting**, select **Refresh posting status** and confirm the operation. The checker uses Node.js and Playwright locally; it does not call OpenAI, Claude, or another model API.
+In **Applied and waiting**, select **Refresh posting status**. The checker uses Node.js and Playwright locally; it does not call OpenAI, Claude, or another model API.
+
+Refresh is deliberately split into two steps:
+
+1. The checker scans the labelled official URLs and proposes possible closures. No files or tracker rows change.
+2. Review the evidence and official posting link, select the specific applications to close, and confirm **Archive selected**. Unselected proposals remain active.
 
 You can preview the same check without changing files:
 
@@ -85,10 +96,13 @@ You can preview the same check without changing files:
 npm run refresh:postings:dry-run
 ```
 
-A posting is closed only when the employer or ATS supplies definitive evidence:
+A posting is proposed as closed only when the employer or ATS supplies corroborated evidence:
 
 - HTTP 404 or 410
-- Explicit text saying the job or posting is closed, filled, removed, expired, or no longer accepting applications
+- Explicit closure text near the start of the posting
+- Explicit closure text plus the target job title no longer appearing in the posting content
+
+The checker prefers the page's main content region rather than scanning navigation, footers, and unrelated page text. A closure phrase inside similar-job recommendations or generic help text is not sufficient by itself.
 
 The following are inconclusive and never change application state:
 
@@ -99,7 +113,7 @@ The following are inconclusive and never change application state:
 - Unexplained redirects
 - Pages with too little readable content to verify
 
-For a confirmed closure, the checker:
+Only after the user selects and confirms a proposed closure, the checker:
 
 1. Changes Status to `Closed - posting closed`.
 2. Records `Official posting confirmed unavailable on YYYY-MM-DD; no rejection email received` in Last Action.
