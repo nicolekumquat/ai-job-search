@@ -1,6 +1,7 @@
 # TechCorp Principal PM Role - Job Description
 
 **Source:** LinkedIn Jobs  
+**Official Job URL:** https://careers.your-company.example/jobs/replace-with-real-url
 **Sourced Date:** 2026-04-08  
 **Recruiting Contact:** Sarah Chen, Technical Recruiter (sarah.chen@techcorp.com)
 

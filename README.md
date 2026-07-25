@@ -130,10 +130,14 @@ See [Study-Topics/README.md](Study-Topics/README.md) for the full system referen
 
 | File | What it does |
 |---|---|
-| `Job-Tracker.md` | Single view of all opportunities with status and last action |
-| `tasks.md` | Tasks and next steps (compatible with MIRA or any checkbox-based system) |
+| `.local-user/Job-Tracker.md` | Private source of truth for application status and history |
+| `.local-user/tasks.md` | Tasks and next steps (compatible with MIRA or any checkbox-based system) |
+| `scripts/run-job-dashboard.js` | Serves a private local dashboard with Interviewing, Applied and Waiting, and Rejected tabs |
+| `scripts/refresh-applied-postings.js` | Checks explicitly labelled official posting URLs locally and proposes possible closures for user confirmation |
 
 Raw per-interviewer notes should also live in the job folder as they happen, for example `Interview note - Bob.md`. Keep those originals, then merge the signal into the structured `70-Interview-Notes.md` artifact.
+
+The posting-status refresh is deterministic and does not call an AI model. See [Local Job Dashboard](docs/Local-Job-Dashboard.md) for setup, safeguards, and tracker requirements.
 
 ## Core Principles
 
@@ -160,8 +164,8 @@ See [GETTING-STARTED.md](GETTING-STARTED.md) for the step-by-step setup guide.
 git clone https://github.com/nicolekumquat/ai-job-search.git
 cd ai-job-search
 
-# Install dependencies for LinkedIn scraping (optional)
-npm install playwright
+# Install dependencies for LinkedIn scraping and the local posting checker (optional)
+npm install
 npx playwright install chromium
 
 # Start filling in your profile
@@ -176,41 +180,26 @@ For privacy: do your real job-search execution under `.local-user/` instead of e
 
 ```
 ai-job-search/
-├── .github/
-│   └── copilot-instructions.md    # LLM instructions (configurable)
-├── .local-user/                   # PRIVATE local-only workspace (gitignored)
-├── local-user-template/           # Suggested private workspace layout
-├── About_You/                     # Your profile (source of truth)
-│   ├── _INDEX.md                  # Routing table for AI agents
-│   ├── Resume.md                  # Career history + accomplishments
-│   ├── Strengths.md               # Demonstrated strengths with evidence
-│   ├── Story-Bank.md              # Reusable STAR stories
-│   ├── Ideal-Role-Profile.md      # Where you'd be valued
-│   ├── Search-Context.md          # PRIVATE: situation, gaps, positioning
-│   ├── Logistics.md               # Location, level, comp, constraints
-│   └── Writing-Style/
-│       ├── Voice-Quick-Reference.md
-│       └── Authenticity-Rubric.md
-├── Study-Topics/                  # AI-assisted study system
-│   ├── README.md                  # Full system reference
-│   ├── Data/                      # Your study notes (source material)
-│   ├── Quizzes/                   # Generated quizzes
-│   ├── Exercises/                 # Generated drills
-│   ├── Completed/                 # Your answered quizzes and drills
-│   ├── Results/                   # Graded reports
-│   ├── Gap-Log.md                 # Running log of knowledge gaps
-│   ├── grade_quiz.py              # Python grading script for MCQ quizzes
-│   └── prompts/                   # Generation and grading prompt templates
-├── _Active/                       # Active job opportunities
-├── _Potential/                    # Potential, not yet pursued
-├── _Archive/                      # Closed or declined
-├── scripts/                       # LinkedIn scraping pipeline
-├── templates/                     # Reusable templates for job materials
-├── Job-Tracker.md                 # Status tracker for all opportunities
-├── Job-Rubric.md                  # Weighted scoring rubric
-├── tasks.md                       # Tasks and next steps
-├── GETTING-STARTED.md             # Step-by-step onboarding guide
-└── README.md                      # This file
+|-- .github/
+|   |-- agents/                    # Workspace-scoped AI agents
+|   `-- copilot-instructions.md    # Shared AI instructions
+|-- .local-user/                   # PRIVATE execution workspace (gitignored)
+|   |-- About_You/                 # Personal profile source of truth
+|   |-- _Active/                   # Active application packets
+|   |-- _Potential/                # Opportunities not yet pursued
+|   |-- _Archive/                  # Closed or declined packets
+|   |-- Job-Tracker.md             # Private dashboard source
+|   |-- dashboard-config.json      # Private portal-link overrides
+|   `-- dashboard.html             # Generated private dashboard
+|-- About_You/                     # Reusable profile templates
+|-- Study-Topics/                  # AI-assisted study system
+|-- docs/                          # Framework workflow references
+|-- local-user-template/           # Private workspace starter files
+|-- scripts/                       # Search automation and local dashboard
+|-- templates/                     # Reusable job-material templates
+|-- Job-Rubric.md                  # Weighted scoring rubric template
+|-- GETTING-STARTED.md             # Step-by-step onboarding guide
+`-- README.md                      # This file
 ```
 
 ## Origin Story

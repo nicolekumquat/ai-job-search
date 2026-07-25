@@ -1,0 +1,16 @@
+{
+  "name": "ai-job-search",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dashboard": "node scripts/run-job-dashboard.js",
+    "dashboard:generate": "node scripts/generate-job-dashboard.js",
+    "test:posting-refresh": "node scripts/refresh-applied-postings.test.js",
+    "refresh:postings:dry-run": "node scripts/refresh-applied-postings.js --dry-run"
+  },
+  "dependencies": {
+    "playwright": "^1.61.1"
+  }
+}

@@ -41,6 +41,7 @@ Hard constraints:
 - If editing files in a job folder, also update .local-user/Job-Tracker.md and .local-user/tasks.md.
 - When helping draft or revise resumes, emails, cover letters, outreach notes, LinkedIn messages, or other outward-facing materials, explicitly remind the user that AI can hallucinate and that they must review and approve the final text before sending or submitting it.
 - If the user asks about training, learning, studying, drills, or interview prep practice, direct them to Shelby and switch to a Shelby-style handoff response.
+- For an Applied and Waiting posting refresh, use the local deterministic checker. Mark a posting closed only for HTTP 404/410 or explicit employer/ATS closure text. Treat login walls, bot challenges, HTTP 401/403/429/5xx, timeouts, DNS failures, and unexplained redirects as inconclusive.
 
 Operating playbook:
 1. Read current state from .local-user/Job-Tracker.md and .local-user/tasks.md.
@@ -62,6 +63,10 @@ Operating playbook:
 	- Every 2-3 check-ins (or when progress stalls), add a plain-language invitation to reassess assumptions.
 	- Use natural wording, for example: "Sometimes it is worth checking assumptions about what you want and what jobs are actually available. Want to explore the market, specific companies, industry trends, or the kind of work you enjoy most?"
 	- Keep it optional and supportive, not pushy.
+13. When the user requests a posting-status refresh:
+	- Run `node scripts/refresh-applied-postings.js` or direct them to the dashboard's **Refresh posting status** button.
+	- For confirmed closure, preserve Applied Date, update the tracker to `Closed - posting closed`, and move the packet from `_Active/` to `_Archive/`.
+	- Describe this as a closed posting, not as an explicit employer rejection.
 
 Output format:
 - Status Snapshot: active roles, overdue count, follow-ups due this week

@@ -36,6 +36,28 @@ Creates `J-XX-CompanyName/01-Job-Description.md` for each scraped job. Then tria
 - LinkedIn's DOM changes periodically - selectors may need updating
 - Scraping results are gitignored (regenerable data)
 
+## Local Private Job Dashboard
+
+Initialize `.local-user/` from [`local-user-template`](../local-user-template/), install Playwright, and start the local-only dashboard:
+
+```bash
+npm install
+npx playwright install chromium
+npm run dashboard
+```
+
+Open `http://127.0.0.1:4173/`. The Markdown tracker remains the source of truth; `.local-user/dashboard.html` is private generated output.
+
+In **Applied and waiting**, **Refresh posting status** checks official employer or ATS URLs locally without calling an AI model. A posting is closed only for HTTP 404/410 or explicit closed, filled, removed, expired, or no-longer-accepting language. Authentication walls, bot challenges, HTTP 401/403/429/5xx, timeouts, DNS failures, and unexplained redirects remain inconclusive and do not change application state.
+
+Preview the check without changing files:
+
+```bash
+npm run refresh:postings:dry-run
+```
+
+For setup, tracker fields, career-portal configuration, and the full safety policy, see [Local Job Dashboard](../docs/Local-Job-Dashboard.md).
+
 ## Job ID Allocation & Drift Check
 
 `next-job-id.js` prevents duplicate `J-XX` IDs. IDs used to be allocated by
