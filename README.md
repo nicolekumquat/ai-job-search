@@ -59,7 +59,8 @@ Every email, cover letter, and LinkedIn post the AI drafts afterward gets checke
 |---|---|
 | `scripts/linkedin-search.js` | Searches LinkedIn Jobs with your criteria via Playwright |
 | `scripts/linkedin-scrape-jds.js` | Scrapes full job descriptions from LinkedIn URLs |
-| `scripts/create-job-folders.js` | Creates `J-XX-CompanyName/` folders with `01-Job-Description.md` in `.local-user/_Active/` |
+| `scripts/register-job.js` | Atomically allocates a J-ID, creates one packet, and adds its tracker row |
+| `scripts/create-job-folders.js` | Bulk-registers scraped jobs through the same atomic workflow |
 | `Job-Rubric.md` | Weighted scoring rubric you configure for your priorities |
 | `.local-user/Job-Tracker.md` | Status and history for every opportunity (personal workspace) |
 | `.local-user/tasks.md` | Task list for next steps and follow-ups (personal workspace) |

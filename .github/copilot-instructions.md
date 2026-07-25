@@ -55,9 +55,11 @@ Before creating or editing files, classify the request:
 ## Job ID Allocation Rules - CRITICAL
 Duplicate `J-XX` IDs have occurred repeatedly when a session created packet folders without registering them in `Job-Tracker.md`, and a later session allocated IDs from the stale tracker.
 
-- A job packet is NOT complete until its row exists in `.local-user/Job-Tracker.md`. Creating the folder and registering the row are one atomic step — never defer the tracker row.
-- Before assigning a new J-ID, run `node scripts/next-job-id.js` (or, at minimum, take the max across BOTH `Job-Tracker.md` and the folder names under `_Active/`, `_Potential/`, and `_Archive/` — never the tracker alone).
-- If `next-job-id.js` reports folders missing tracker rows, add those rows before allocating any new ID.
+- For every new job packet, use `node scripts/register-job.js --company "..." --role "..." --url "..." --bucket active|potential`.
+- Do not manually assign a J-ID, create a new `J-*` folder, or append its first tracker row as separate actions.
+- The registrar automatically validates tracker/folder drift, allocates the next safe ID, creates the packet and row together, and rolls back both if verification fails.
+- If registration reports drift or a missing `Job-Tracker.md`, stop packet creation and repair the reported workspace problem before retrying.
+- `node scripts/next-job-id.js --check` remains available as a read-only diagnostic; it is not a substitute for registration.
 - These rules apply to every AI assistant and every parallel session working in this workspace.
 
 ## Writing Style
@@ -154,10 +156,11 @@ You can use tasks.md with any task manager (Notion, Obsidian, MIRA, paper checkl
 
 ### After editing files in a job folder
 When creating or editing files in any `.local-user/_Active/J-*` or `.local-user/_Potential/J-*` folder:
-1. Read the new/changed content. Detect actions taken, status changes, and follow-up tasks.
-2. **Update Job-Tracker.md**: Update the matching row's Last Action, Date, and Status columns.
-3. **Update tasks.md**: Add new tasks under the appropriate heading. Use priority prefixes (P1/P2) and @due dates.
-4. Don't duplicate existing tasks. If an existing task is superseded, mark it done by changing `- [ ]` to `- [x]`.
+1. For a new packet, use `scripts/register-job.js`; the initial tracker row is created automatically.
+2. Read the new/changed content. Detect actions taken, status changes, and follow-up tasks.
+3. **Update Job-Tracker.md**: Update the matching row's Last Action, Date, and Status columns.
+4. **Update tasks.md**: Add new tasks under the appropriate heading. Use priority prefixes (P1/P2) and @due dates.
+5. Don't duplicate existing tasks. If an existing task is superseded, mark it done by changing `- [ ]` to `- [x]`.
 
 ### Archiving
 When a job is clearly closed:
