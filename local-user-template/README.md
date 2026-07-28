@@ -30,6 +30,7 @@ Then copy only the templates you need from the framework into `.local-user/` and
 Recommended profile layer:
 - Keep a master `About_You/Story-Bank.md` with 5-8 reusable STAR stories.
 - Tailor copies of those stories inside each `J-*` folder when preparing for a specific role.
+- Use `45-Workday-Supplement.md` in a private job folder when you need an ATS-ready employment history, education, certifications, and skills draft.
 
 ## Contribution rule
 

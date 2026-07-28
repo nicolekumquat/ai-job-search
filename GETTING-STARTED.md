@@ -120,6 +120,7 @@ Use numbered filenames so files stay ordered as the folder grows. Recommended ba
 - `30-Rubric-Score.md`
 - `35-Study-Plan.md`
 - `40-Outreach-Email.md`
+- `45-Workday-Supplement.md`
 - `50-Customer-Value-Stories.md`
 - `60-Interview-Prep.md`
 - `65-Mock-Interview-Packet.md`
@@ -136,12 +137,13 @@ For each active opportunity, ask your AI assistant to:
 1. **Score it** against your rubric → fill in `Job-Rubric.md`
 2. **Analyze fit** → use `templates/Fit-Analysis.md`
 3. **Write a self-assessment** → use `templates/Self-Assessment.md`
-4. **Tailor interview stories** from your story bank → use `templates/Customer-Value-Stories.md`
-5. **Build a study plan** for knowledge gaps → use `templates/Study-Plan.md`
-6. **Prep for interviews** → use `templates/Interview-Prep.md` (include company research and focused study priorities based on role-relevant risks and constraints)
-7. **Capture raw per-interviewer notes** in the job folder as they happen (for example `Interview note - Bob.md`)
-8. **Merge and lightly clean interview notes** → use `templates/Interview-Notes.md` for the structured roll-up (preserve every note fragment, even if unclear)
-9. **Draft outreach** → use `templates/Outreach-Email.md`
+4. **Prepare ATS supplements when needed** → use `templates/Workday-Supplement.md`, save completed drafts under `.local-user/`, and generate a `.docx` companion when easier copy/paste into Workday would help
+5. **Tailor interview stories** from your story bank → use `templates/Customer-Value-Stories.md`
+6. **Build a study plan** for knowledge gaps → use `templates/Study-Plan.md`
+7. **Prep for interviews** → use `templates/Interview-Prep.md` (include company research and focused study priorities based on role-relevant risks and constraints)
+8. **Capture raw per-interviewer notes** in the job folder as they happen (for example `Interview note - Bob.md`)
+9. **Merge and lightly clean interview notes** → use `templates/Interview-Notes.md` for the structured roll-up (preserve every note fragment, even if unclear)
+10. **Draft outreach** → use `templates/Outreach-Email.md`
 
 If interviewer names are available, include a LinkedIn/profile review pull-in in your interview prep artifact.
 

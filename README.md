@@ -79,6 +79,7 @@ Recommended base sequence:
 - `30-Rubric-Score.md`
 - `35-Study-Plan.md`
 - `40-Outreach-Email.md`
+- `45-Workday-Supplement.md`
 - `50-Customer-Value-Stories.md`
 - `60-Interview-Prep.md`
 - `65-Mock-Interview-Packet.md`
@@ -97,6 +98,7 @@ For each serious opportunity, the AI generates materials grounded in your profil
 |---|---|
 | `templates/Fit-Analysis.md` | Where you align (with evidence), where you don't, how to position |
 | `templates/Self-Assessment.md` | Mnookin-style Interests / Capabilities / Market Realities |
+| `templates/Workday-Supplement.md` | Four-section ATS supplement for employment history, education, certifications, and skills, with optional `.docx` copy/paste companion |
 | `templates/Customer-Value-Stories.md` | Tailored STAR stories selected from your story bank for a specific role |
 | `templates/Study-Plan.md` | Targeted study plan based on gaps from the fit analysis |
 | `templates/Interview-Prep.md` | Company research + interviewer research + role-specific questions + study guide |
@@ -147,6 +149,8 @@ Raw per-interviewer notes should also live in the job folder as they happen, for
 
 **Honest about gaps.** Fit analyses call out where you don't match. Self-assessments name market realities. Being honest about gaps is always better than overstating fit.
 
+For ATS form prep, see [Workday Supplement Workflow](docs/Workday-Supplement-Workflow.md). Completed supplements are private application artifacts and belong under `.local-user/`; use Markdown as the auditable source and `.docx` as a copy/paste companion when helpful.
+
 ## Getting Started
 
 See [GETTING-STARTED.md](GETTING-STARTED.md) for the step-by-step setup guide.
@@ -177,6 +181,7 @@ ai-job-search/
 ├── .github/
 │   └── copilot-instructions.md    # LLM instructions (configurable)
 ├── .local-user/                   # PRIVATE local-only workspace (gitignored)
+├── docs/                          # Framework workflow references
 ├── local-user-template/           # Suggested private workspace layout
 ├── About_You/                     # Your profile (source of truth)
 │   ├── _INDEX.md                  # Routing table for AI agents
