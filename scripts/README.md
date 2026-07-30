@@ -82,12 +82,15 @@ must go through `register-job.js`.
 node scripts/next-job-id.js           # print the next safe J-ID + drift warnings
 node scripts/next-job-id.js --check   # CI-style check; exit 1 on drift
 node scripts/next-job-id.js --json    # machine-readable output
+node scripts/next-job-id.test.js      # run allocator and drift regression tests
 ```
 
 Drift rules: a **folder without a tracker row is an error** (that's the
 collision hazard; add the row); a tracker row without a folder is only a
 warning (legitimate when a role was tracked without a packet or the packet was
 deliberately removed). Duplicate folder IDs across buckets are also errors.
+`--check` also fails when `Job-Tracker.md` is missing because tracker/folder
+consistency cannot be verified.
 
 Use this command directly for diagnostics and repairs. You do not need to run
 it before `register-job.js`; the registrar runs it automatically and stops

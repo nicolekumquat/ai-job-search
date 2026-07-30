@@ -110,6 +110,7 @@ function main() {
   const trackerPath = path.join(rootDir, TRACKER_FILE);
   const trackerIds = readTrackerIds(trackerPath);
   const folderIds = readFolderIds(rootDir);
+  const trackerMissing = trackerIds === null;
 
   const trackerMax = trackerIds && trackerIds.size ? Math.max(...trackerIds.keys()) : 0;
   const folderMax = folderIds.size ? Math.max(...folderIds.keys()) : 0;
@@ -129,12 +130,35 @@ function main() {
     }
   }
 
+  const failureReasons = [];
+  if (trackerMissing) {
+    failureReasons.push({
+      code: 'tracker_missing',
+      message: `${TRACKER_FILE} is missing; tracker/folder consistency cannot be verified.`,
+    });
+  }
+  if (foldersMissingRows.length) {
+    failureReasons.push({
+      code: 'folders_missing_tracker_rows',
+      message: `${foldersMissingRows.length} packet folder(s) have no tracker row.`,
+    });
+  }
+  if (duplicateFolders.length) {
+    failureReasons.push({
+      code: 'duplicate_folder_ids',
+      message: `${duplicateFolders.length} duplicate packet folder ID(s) were found.`,
+    });
+  }
+  const checkPassed = failureReasons.length === 0;
+
   if (args.json) {
     process.stdout.write(JSON.stringify({
       nextId: normalizeId(nextNumber),
       trackerMax: trackerMax ? normalizeId(trackerMax) : null,
       folderMax: folderMax ? normalizeId(folderMax) : null,
       trackerFound: Boolean(trackerIds),
+      checkPassed,
+      failureReasons,
       foldersMissingTrackerRows: foldersMissingRows,
       trackerRowsWithoutFolders: rowsMissingFolders,
       duplicateFolderIds: duplicateFolders,
@@ -145,8 +169,15 @@ function main() {
       process.stdout.write(`  Tracker max: ${trackerMax ? normalizeId(trackerMax) : '(no tracker rows found)'}`
         + `   Folder max: ${folderMax ? normalizeId(folderMax) : '(no packet folders found)'}\n`);
     }
-    if (!trackerIds) {
-      process.stdout.write(`NOTE: no ${TRACKER_FILE} found at ${trackerPath} — drift check skipped.\n`);
+    if (trackerMissing) {
+      if (args.check) {
+        process.stdout.write(
+          `ERROR — ${TRACKER_FILE} is missing at ${trackerPath}; drift cannot be verified.\n` +
+          'Restore or initialize the tracker, then run the check again.\n'
+        );
+      } else {
+        process.stdout.write(`NOTE: no ${TRACKER_FILE} found at ${trackerPath} — drift check skipped.\n`);
+      }
     }
     if (duplicateFolders.length) {
       process.stdout.write('\nERROR — duplicate folder IDs (two packets share one J-ID):\n');
@@ -165,7 +196,7 @@ function main() {
     }
   }
 
-  if (args.check && (foldersMissingRows.length || duplicateFolders.length)) process.exit(1);
+  if (args.check && !checkPassed) process.exit(1);
 }
 
 main();
