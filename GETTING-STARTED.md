@@ -19,10 +19,13 @@ npx playwright install chromium
 
 ## Step 1.5: Create Your Private Local Workspace
 
-Create a local-only folder for personal job-search execution:
+Create a local-only folder for personal job-search execution, then initialize
+its tracker and packet directories:
 
 ```bash
 mkdir .local-user
+mkdir .local-user/_Active .local-user/_Potential .local-user/_Archive
+cp local-user-template/Job-Tracker.md .local-user/Job-Tracker.md
 ```
 
 Use `.local-user/` for your real profile content, live applications, trackers, interview notes, and study outputs. This folder is gitignored and should never be committed.
@@ -102,15 +105,35 @@ node linkedin-search.js
 node linkedin-scrape-jds.js
 # → Outputs linkedin-jd-results.json
 
-# 4. Create job folders
+# 4. Register jobs
 node create-job-folders.js
-# → Creates J-XX-CompanyName/ folders with 01-Job-Description.md under .local-user/_Active/
+# → Atomically creates each packet and its matching Job-Tracker.md row
 ```
 
-Folders are created in `.local-user/_Active/` by default.
+Jobs are registered in `.local-user/_Active/` by default. Re-running the same
+scrape safely skips official URLs that are already registered.
 
 ### Option B: Manual
-Create a folder like `.local-user/_Active/J-01-CompanyName/` and add a `01-Job-Description.md` with the JD text. The AI can work with it from there. Use `_Active/` for current opportunities, `_Potential/` for jobs you may apply to later, and `_Archive/` for completed or closed opportunities.
+
+From the repository root, register one opportunity with:
+
+```bash
+node scripts/register-job.js \
+  --company "Example Corp" \
+  --role "Senior Product Manager" \
+  --url "https://careers.example.com/jobs/123" \
+  --bucket potential
+```
+
+The command validates the workspace, allocates the next J-ID, creates the
+packet, and adds its `Job-Tracker.md` row as one operation. If anything fails,
+it rolls back partial changes. It stops and explains the repair needed if an
+older folder is missing from the tracker.
+
+Do not manually assign a J-ID or create a new `J-*` folder. After registration,
+paste the full job description into the generated `01-Job-Description.md`.
+Use `--bucket active` for a current opportunity and `--bucket potential` for a
+job you may apply to later.
 
 Use numbered filenames so files stay ordered as the folder grows. Recommended base sequence:
 - `01-Job-Description.md`

@@ -19,13 +19,19 @@ Do not commit personal artifacts to the repository. Keep personal work in `.loca
 
 ## Quick setup
 
-Create your private workspace:
+Create your private workspace, packet directories, and blank tracker:
 
 ```bash
 mkdir .local-user
+mkdir .local-user/_Active .local-user/_Potential .local-user/_Archive
+cp local-user-template/Job-Tracker.md .local-user/Job-Tracker.md
 ```
 
 Then copy only the templates you need from the framework into `.local-user/` and fill those in there.
+
+Register every new opportunity with `scripts/register-job.js`. Do not manually
+assign a J-ID or create a new packet folder; the registrar creates the folder
+and tracker row together.
 
 Recommended profile layer:
 - Keep a master `About_You/Story-Bank.md` with 5-8 reusable STAR stories.
