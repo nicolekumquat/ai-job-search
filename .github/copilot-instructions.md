@@ -120,6 +120,18 @@ Leave the 90s available for late-stage docs such as:
 - For specific opportunities, create a tailored story artifact inside the job folder that selects and reframes relevant stories for that company's context.
 - Never invent new story facts while tailoring; only change framing, emphasis, and ordering.
 
+## Workday Supplement Workflow
+- Use `templates/Workday-Supplement.md` when an ATS asks for structured employment history, education, certifications, or skills.
+- Completed supplements are personal application artifacts. Write them only inside `.local-user/_Active/J-*` or `.local-user/_Potential/J-*`.
+- Use `45-Workday-Supplement.md` as the auditable source of truth. After user review, generate `45-Workday-Supplement.docx` in the same private job folder when that helps the user copy/paste into Workday fields.
+- Preserve the four-section structure: Employment History, Education, Certifications, Skills.
+- Every field must trace back to `.local-user/About_You/` source files, the job folder, or direct user confirmation.
+- Mark missing fields as `[Needs user confirmation]`; never infer dates, titles, credential names, institutions, or skills.
+- Do not include private search context, sensitive positioning, compensation context, layoff context, or interview strategy in ATS fields.
+- Present skills as a single alphabetical (A-Z) bulleted list, one skill per line. Do not group skills into categories, preserve source order, or rank by job relevance after selecting the supported skills.
+- Keep to 20 total skills or fewer. Exceed 20 only for skills critical to job application requirements, and call out each over-limit skill for user review.
+- Human review is required before the user enters any generated content into Workday or another ATS.
+
 ## Interview Notes Workflow
 - Keep raw per-interviewer note files in the job folder (for example `Interview note - Bob.md`) as part of the workflow.
 - Maintain a structured roll-up in `70-Interview-Notes.md` that consolidates signal across interviewers.
