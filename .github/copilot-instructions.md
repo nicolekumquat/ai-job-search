@@ -52,6 +52,14 @@ Before creating or editing files, classify the request:
 1. If it helps an individual's job hunt, use `.local-user/` only.
 2. If it improves the toolkit for all users, open/update an Issue first, then optionally implement framework changes.
 
+## Job ID Allocation Rules - CRITICAL
+Duplicate `J-XX` IDs have occurred repeatedly when a session created packet folders without registering them in `Job-Tracker.md`, and a later session allocated IDs from the stale tracker.
+
+- A job packet is NOT complete until its row exists in `.local-user/Job-Tracker.md`. Creating the folder and registering the row are one atomic step — never defer the tracker row.
+- Before assigning a new J-ID, run `node scripts/next-job-id.js` (or, at minimum, take the max across BOTH `Job-Tracker.md` and the folder names under `_Active/`, `_Potential/`, and `_Archive/` — never the tracker alone).
+- If `next-job-id.js` reports folders missing tracker rows, add those rows before allocating any new ID.
+- These rules apply to every AI assistant and every parallel session working in this workspace.
+
 ## Writing Style
 When drafting materials for the user, follow the style guide in `.local-user/About_You/Writing-Style/Voice-Quick-Reference.md`:
 - Match the user's actual voice, not generic corporate prose
@@ -74,6 +82,13 @@ Read `.local-user/About_You/_INDEX.md` for a routing table to source-of-truth fi
 ## Document Conventions
 - All generated documents must include `*Generated on YYYY-MM-DD*` on the line immediately after the `#` heading
 - Reference material (job descriptions, emails from others) does NOT get a generated date
+- When generating a Word artifact, use semantic heading and list styles where possible. Run `scripts/docx_pagination.py` before delivery to keep headings with their content, prevent list paragraphs from splitting, and enable widow/orphan control.
+- Do not keep entire experience sections together; that can create large blank areas. Pagination safeguards do not replace the user's visual review of the final DOCX or PDF.
+
+## Job URL Assessment Rules
+- When the user provides job opening links strictly for assessment, treat common query string parameters as tracking/source metadata rather than fit evidence.
+- Ignore referral, campaign, and source parameters such as `source`, `codes`, `gh_src`, `utm_source`, `utm_medium`, `utm_campaign`, and similar fields when deduplicating or interpreting openings.
+- Preserve query parameters when fetching a posting if they appear required to load or identify the job; the rule is to ignore tracking metadata for assessment, not to blindly strip every URL.
 
 ## Job Folder Artifact Naming
 Inside each `.local-user/_Active/J-*` or `.local-user/_Potential/J-*` folder, use numbered filenames so artifacts sort in a stable order.

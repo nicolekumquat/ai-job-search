@@ -104,6 +104,7 @@ For each serious opportunity, the AI generates materials grounded in your profil
 | `templates/Interview-Prep.md` | Company research + interviewer research + role-specific questions + study guide |
 | `templates/Interview-Notes.md` | Consolidated interview notes plus lightly cleaned raw note handling that preserves every fragment |
 | `templates/Outreach-Email.md` | Email drafts in your voice, grounded in your real experience |
+| `templates/Workday-Supplement.md` | Source-grounded employment/education/certification/skills fields for re-entry into Workday-style application forms |
 
 ### Phase 5: Study and Drill
 
